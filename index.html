@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <!-- Load your application shell -->
-    <script type="module" src="src/my-app.js"></script>
+    <script type="module" src="src/blog-app.js"></script>
 
     <!-- Add any global styles for body, document, etc. -->
     <style>
@@ -104,10 +104,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-height: 100vh;
         background-color: #eeeeee;
       }
+
+      blog-app[unresolved] {
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        background: #ffffff;
+        font-family: 'Pacifico';
+        text-transform: lowercase;
+        font-size: 30px;
+        height: 64px;
+        text-align: center;
+        position: relative;
+        padding: 0 16px;
+      }
+
+      blog-app[unresolved] div {
+        -ms-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <my-app></my-app>
+    <blog-app unresolved><div>My simple blog</div><main><article></article></main></blog-app>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>

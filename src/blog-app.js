@@ -31,7 +31,7 @@ setPassiveTouchGestures(true);
 // in `index.html`.
 setRootPath(MyAppGlobals.rootPath);
 
-class MyApp extends PolymerElement {
+class BlogApp extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -181,6 +181,11 @@ class MyApp extends PolymerElement {
 
   static get properties() {
     return {
+      unresolved: {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      },
       page: {
         type: String,
         reflectToAttribute: true,
@@ -195,6 +200,11 @@ class MyApp extends PolymerElement {
     return [
       '_routePageChanged(routeData.page)'
     ];
+  }
+
+  ready() {
+    super.ready();
+    this.set('unresolved', false);
   }
 
   _routePageChanged(page) {
@@ -239,4 +249,4 @@ class MyApp extends PolymerElement {
   }
 }
 
-window.customElements.define('my-app', MyApp);
+window.customElements.define('blog-app', BlogApp);
