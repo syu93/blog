@@ -17,6 +17,7 @@
     "@polymer/app-route": "^3.0.0-pre.15",
     "@polymer/iron-flex-layout": "^3.0.0-pre.15",
     "@polymer/iron-iconset-svg": "^3.0.0-pre.15",
+    "@polymer/iron-image": "^3.0.0-pre.19",
     "@polymer/iron-media-query": "^3.0.0-pre.15",
     "@polymer/iron-pages": "^3.0.0-pre.15",
     "@polymer/iron-selector": "^3.0.0-pre.15",
@@ -25,7 +26,8 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "express": "^4.16.3",
     "mysql2": "^1.5.3",
-    "sequelize": "^4.37.10"
+    "sequelize": "^4.37.10",
+    "timeago.js": "^3.0.2"
   },
   "devDependencies": {
     "polymer-cli": "^1.7.1",
