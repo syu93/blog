@@ -11,53 +11,48 @@ class BlogCard extends PolymerElement {
           padding: 24px;
           position: relative;
           text-align: left;
+          border: 1px solid #dadce0;
+          border-radius: 8px;
         }
 
         article {
-          display: -ms-flexbox;
-          display: -webkit-flex;
           display: flex;
-          -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-          flex-direction: row;
-          -webkit-flex-wrap: nowrap;
-          -ms-flex-wrap: nowrap;
           flex-wrap: nowrap;
-          -webkit-justify-content: space-between;
-          -ms-flex-pack: justify;
-          justify-content: space-between;
-          -webkit-align-content: stretch;
-          -ms-flex-line-pack: stretch;
-          align-content: stretch;
-          -webkit-align-items: stretch;
-          -ms-flex-align: stretch;
-          align-items: stretch;
         }
 
         figure {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          bottom: auto;
+          left: auto;
+          z-index: 1;
+
           margin: 0;
           width: 20%;
+          min-height: 64px;
+          min-width: 64px;
+          max-height: 64px;
+          max-width: 64px;
         }
 
         a {
           display: block;
           color: inherit;
           text-decoration: none;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
         }
 
         article header {
-          width: 80%;
+          width: 100%;
           box-sizing: border-box;
+          margin-right: 0.8rem;
+          padding-right: 4em;
         }
 
         article header h1 {
           margin: 0;
-          font-size: 1em;
+          font-size: 1.4em;
+          margin-bottom: 4em;
         }
 
         article iron-image {
@@ -71,60 +66,108 @@ class BlogCard extends PolymerElement {
           margin: 0;
           font-size: 0.8em;
           color: #424141;
+          min-height: 8em;
+          max-height: 8em;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
+        .flex-row {
+          display: -webkit-box;
+          display: -moz-box;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-align-items: center;
+          align-items: center;
+          -webkit-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+        }
+
+
+        .flex-row-center {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          align-content: flex-end;
+        }
 
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-          :host {
+          article header {
+            padding-right: 10em;
+          }
+          figure {
+            min-height: 128px;
+            min-width: 128px;
+            max-height: 128px;
+            max-width: 128px;
+          }
+          article iron-image {
+            background-color: lightgray;
+            min-height: 128px;
+            min-width: 128px;
+            width: 100%;
+            height: 100%;
+          }
+          /* Caroussel mode */
+          :host([card]) {
             display: inline-block;
             width: 25%;
+            margin: 24px;
+            padding: 0;
+            /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
           }
-
-          article {
+          :host([card]) article {
             -webkit-flex-direction: column-reverse;
             -ms-flex-direction: column-reverse;
             flex-direction: column-reverse;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
           }
-
-          article header {
+          :host([card]) article header {
             padding: 16px;
             width: 100%;
             z-index: 10;
           }
-
-          article figure {
+          :host([card]) article figure {
             width: 100%;
             height: 20%;
           }
-
-          article iron-image {
+          :host([card]) article iron-image {
             display: block;
-            min-height: 15vh;
+            min-height: 24vh;
             border-radius: 4px 4px 0 0;
           }
-
-          blog-time { padding: 16px; }
+          :host([card]) blog-time {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            color: #ffffff;
+          }
         }
       </style>
-      <!-- <a href="#read"></a> -->
-      <article>
-        <header>
-          <h1>Pariatur tempor incididunt esse adipisicing aliqua aute occaecat in voluptate aliqua.</h1>
-          <p>Lorem ipsum nisi est voluptate non ex cillum culpa sint aliquip eu sunt magna exercitation aliqua sint ullamco et sunt tempor aute dolore eu cillum in in commodo sit deserunt eu dolor.</p>
-        </header>
-        <!-- FIXME : add b64 placeholder -->
-        <figure><iron-image
+        <article>
+          <a href="#read"></a>
+          <header>
+            <h1><a href$="[[post.slug]]">[[post.title]]</a></h1>
+            <div class="flex-row-center">
+              <span class="author-time flex-row">[[post.author]]<blog-time date="[[post.date]]"></blog-time></span>
+              <span class="read-time">[[post.readTime]] minutes</span>
+            </div>
+          </header>
+          <!-- FIXME : add b64 placeholder -->
+          <figure><a href$="[[post.slug]]"><iron-image
             src="http://placehold.it/720/4285f4"
-            preload sizing="cover"></iron-image></figure>
-      </article>
-      <blog-time></blog-time>
+            preload sizing="cover"></iron-image><figcaption></figcaption></a></figure>
+        </article>
     `;
   }
   static get properties() {
     return {
+      post: {
+        type: Object,
+      },
       horizontal: {
         type: Boolean,
         value: true,

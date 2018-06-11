@@ -9,6 +9,7 @@
  */
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-ajax/iron-ajax.js';
 import './blog-card.js';
 import './shared-styles.js';
 
@@ -18,73 +19,55 @@ class BlogHome extends PolymerElement {
       <style include="shared-styles">
         :host {
           display: block;
-
           padding: 10px;
         }
 
-        blog-card { 
-          border-bottom: 1px solid #d6cece;
-        }
+        blog-card { margin-bottom: 1em; }
+        blog-card:last-child { border: none; }
 
-        blog-card:last-child {
-          border: none;
-        }
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-         :host {}
 
-         section main {
-          display: -ms-flexbox;
-          display: -webkit-flex;
-          display: flex;
-          -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-          flex-direction: row;
-          -webkit-justify-content: space-between;
-          -ms-flex-pack: justify;
-          justify-content: space-between;
-          -webkit-align-content: stretch;
-          -ms-flex-line-pack: stretch;
-          align-content: stretch;
-          -webkit-align-items: stretch;
-          -ms-flex-align: stretch;
-          align-items: stretch;
-          -webkit-flex-wrap: wrap;
-          -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-         }
-
-         blog-card {
-          border: none;
-          flex-grow: 1;
-         } 
+          section main, section header {
+            width: 60%;
+            margin: auto;
+          }
         }
       </style>
+      <!-- <iron-ajax
+         auto
+         url="https://jsonplaceholder.typicode.com/posts"
+         handle-as="json"
+         last-response="{{posts}}"></iron-ajax> -->
       <section>
+        <header>
+          <h1>Latest posts</h1>
+        </header>
         <main>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
-          <blog-card></blog-card>
+          <template is="dom-repeat" items={{posts}} 
+            as=post index-as=index>
+            <blog-card  post="[[post]]"></blog-card>
+          </template>
         </main>
       </section>
     `;
   }
+
+  static get properties() {
+    return {
+      posts: {
+        type: Array,
+        value: () => [
+            {slug: "#some-post-slug-url", title: "Eiusmod dolore ea duis in dolor dolor ut aliqua occaecat aliqua quis mollit ex aute ut dolor non.", author: "Syu93", date: Date.now() - 1*24*60*60*1000, readTime: 12, body: "Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. "},
+            {slug: "#some-post-slug-url", title: "Cillum tempor esse aliquip adipisicing amet enim dolore sunt in quis in pariatur.", author: "Syu93", date: Date.now() - 2*24*60*60*1000, readTime: 12, body: "plop is the new plop "},
+            {slug: "#some-post-slug-url", title: "Exercitation culpa quis in sint eu proident consectetur quis ea voluptate.", author: "Syu93", date: Date.now() - 3*24*60*60*1000, readTime: 12, body: "In dolore sed laboris veniam amet voluptate in excepteur eiusmod adipisicing eu fugiat incididunt est dolore ea cillum in et ullamco proident ea commodo occaecat ut."},
+            {slug: "#some-post-slug-url", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+          ]
+      }
+    };
+  }
+
 }
 
 window.customElements.define('blog-home', BlogHome);
