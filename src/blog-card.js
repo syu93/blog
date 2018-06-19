@@ -8,7 +8,6 @@ class BlogCard extends PolymerElement {
       <style>
         :host {
           display: block;
-          padding: 24px;
           position: relative;
           text-align: left;
           border: 1px solid #dadce0;
@@ -18,6 +17,15 @@ class BlogCard extends PolymerElement {
         article {
           display: flex;
           flex-wrap: nowrap;
+          padding: 24px;
+        }
+
+        article>a {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
         }
 
         figure {
@@ -148,16 +156,16 @@ class BlogCard extends PolymerElement {
         }
       </style>
         <article>
-          <a href="#read"></a>
+          <a href$="[[post.slug]]" title$="[[post.title]]" on-click="fireTransition"></a>
           <header>
-            <h1><a href$="[[post.slug]]">[[post.title]]</a></h1>
+            <h1><a href$="[[post.slug]]" on-click="fireTransition">[[post.title]]</a></h1>
             <div class="flex-row-center">
               <span class="author-time flex-row">[[post.author]]<blog-time date="[[post.date]]"></blog-time></span>
               <span class="read-time">[[post.readTime]] minutes</span>
             </div>
           </header>
           <!-- FIXME : add b64 placeholder -->
-          <figure><a href$="[[post.slug]]"><iron-image
+          <figure><a href$="[[post.slug]]" on-click="fireTransition"><iron-image
             src="http://placehold.it/720/4285f4"
             preload sizing="cover"></iron-image><figcaption></figcaption></a></figure>
         </article>
@@ -174,6 +182,11 @@ class BlogCard extends PolymerElement {
         reflectToAttribute: true
       },
     };
+  }
+
+  fireTransition(e) {
+    // e.preventDefault();
+    this.dispatchEvent(new CustomEvent("fire-transition", {detail: {header: "http://placehold.it/720/4285f4"}, bubbles: true}));
   }
 }
 

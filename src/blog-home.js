@@ -47,7 +47,7 @@ class BlogHome extends PolymerElement {
         <main>
           <template is="dom-repeat" items={{posts}} 
             as=post index-as=index>
-            <blog-card  post="[[post]]"></blog-card>
+            <blog-card post="[[post]]" on-fire-transition="dispatchTransition"></blog-card>
           </template>
         </main>
       </section>
@@ -56,16 +56,28 @@ class BlogHome extends PolymerElement {
 
   static get properties() {
     return {
+      page: {
+        type: String,
+        reflectToAttribute: true,
+        observer: '_pageChanged'
+      },
+      route: Object,
       posts: {
         type: Array,
         value: () => [
-            {slug: "#some-post-slug-url", title: "Eiusmod dolore ea duis in dolor dolor ut aliqua occaecat aliqua quis mollit ex aute ut dolor non.", author: "Syu93", date: Date.now() - 1*24*60*60*1000, readTime: 12, body: "Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. "},
-            {slug: "#some-post-slug-url", title: "Cillum tempor esse aliquip adipisicing amet enim dolore sunt in quis in pariatur.", author: "Syu93", date: Date.now() - 2*24*60*60*1000, readTime: 12, body: "plop is the new plop "},
-            {slug: "#some-post-slug-url", title: "Exercitation culpa quis in sint eu proident consectetur quis ea voluptate.", author: "Syu93", date: Date.now() - 3*24*60*60*1000, readTime: 12, body: "In dolore sed laboris veniam amet voluptate in excepteur eiusmod adipisicing eu fugiat incididunt est dolore ea cillum in et ullamco proident ea commodo occaecat ut."},
-            {slug: "#some-post-slug-url", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-1", title: "Eiusmod dolore ea duis in dolor dolor ut aliqua occaecat aliqua quis mollit ex aute ut dolor non.", author: "Syu93", date: Date.now() - 1*24*60*60*1000, readTime: 12, body: "Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. Ut enim eu sint consectetur pariatur commodo sit eiusmod sit ea laborum velit nostrud sunt proident aliqua excepteur tempor qui tempor aute. "},
+            {slug: "/posts/some-post-slug-url-2", title: "Cillum tempor esse aliquip adipisicing amet enim dolore sunt in quis in pariatur.", author: "Syu93", date: Date.now() - 2*24*60*60*1000, readTime: 12, body: "plop is the new plop "},
+            {slug: "/posts/some-post-slug-url-3", title: "Exercitation culpa quis in sint eu proident consectetur quis ea voluptate.", author: "Syu93", date: Date.now() - 3*24*60*60*1000, readTime: 12, body: "In dolore sed laboris veniam amet voluptate in excepteur eiusmod adipisicing eu fugiat incididunt est dolore ea cillum in et ullamco proident ea commodo occaecat ut."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
           ]
       }
     };
+  }
+
+  dispatchTransition(e, detail) { this.dispatchEvent(new CustomEvent('fire-transition', {detail: detail})); }
+
+  _log(value) {
+    console.log(value);
   }
 
 }

@@ -122,6 +122,20 @@ class BlogApp extends PolymerElement {
           border-bottom: 4px solid var(--app-primary-color);
         }
 
+
+        /* Read mode */
+        :host([page="posts"]) app-header {
+          color: #ffffff;
+          background-color: transparent;
+          border: none;
+        }
+
+        :host([page="posts"]) app-header[shadow] { background-color: rgba(0, 0, 0, 0.48); }
+        :host([page="posts"]) [main-title] a { color: #ffffff; }
+        :host([page="posts"]) [main-title] {
+          background-color: transparent;
+        }
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
@@ -129,9 +143,18 @@ class BlogApp extends PolymerElement {
             display: none;
           }
 
+          :host([page="posts"]) [main-title] a { color: var(--app-secondary-color); }
+          :host([page="posts"]) app-header[shadow] [main-title] a {
+            color: #ffffff;
+          }
+          :host([page="posts"]) app-header[shadow] iron-selector.links a {
+            color: transparent;
+          }
+
           iron-selector.links {
             display: block;
           }
+          
 
           /* The drawer button isn't shown in the wide layout, so we don't
           need to offset the title */
@@ -172,7 +195,8 @@ class BlogApp extends PolymerElement {
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <blog-home name="home"></blog-home>
+            <blog-home name="home" route="[[subroute]]" on-fire-transition="handleTransition"></blog-home>
+            <blog-posts name="posts" route="[[subroute]]"></blog-posts>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
         </app-header-layout>
@@ -217,6 +241,8 @@ class BlogApp extends PolymerElement {
       this.page = 'home';
     } else if (['home'].indexOf(page) !== -1) {
       this.page = page;
+    } else if (['posts'].indexOf(page) !== -1) {
+      this.page = page;
     } else {
       this.page = 'view404';
     }
@@ -237,10 +263,19 @@ class BlogApp extends PolymerElement {
         import('./blog-home.js')
           .catch(err => console.error(`[Router] ${err}`));
         break;
+      case 'posts':
+        import('./blog-posts.js')
+          .catch(err => console.error(`[Router] ${err}`));
+        break;
       case 'view404':
         import('./my-view404.js');
         break;
     }
+  }
+
+  handleTransition(e, detail) {
+    this.set('postMode', true);
+    console.log(detail);
   }
 }
 
