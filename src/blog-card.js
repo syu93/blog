@@ -156,16 +156,16 @@ class BlogCard extends PolymerElement {
         }
       </style>
         <article>
-          <a href$="[[post.slug]]" title$="[[post.title]]" on-click="fireTransition"></a>
+          <a href$="[[post.slug]]" title$="[[post.title]]"></a>
           <header>
-            <h1><a href$="[[post.slug]]" on-click="fireTransition">[[post.title]]</a></h1>
+            <h1><a href$="[[post.slug]]">[[post.title]]</a></h1>
             <div class="flex-row-center">
               <span class="author-time flex-row">[[post.author]]<blog-time date="[[post.date]]"></blog-time></span>
               <span class="read-time">[[post.readTime]] minutes</span>
             </div>
           </header>
           <!-- FIXME : add b64 placeholder -->
-          <figure><a href$="[[post.slug]]" on-click="fireTransition"><iron-image
+          <figure><a href$="[[post.slug]]"><iron-image
             src="http://placehold.it/720/4285f4"
             preload sizing="cover"></iron-image><figcaption></figcaption></a></figure>
         </article>
@@ -184,10 +184,6 @@ class BlogCard extends PolymerElement {
     };
   }
 
-  fireTransition(e) {
-    // e.preventDefault();
-    this.dispatchEvent(new CustomEvent("fire-transition", {detail: {header: "http://placehold.it/720/4285f4"}, bubbles: true}));
-  }
 }
 
 window.customElements.define('blog-card', BlogCard);

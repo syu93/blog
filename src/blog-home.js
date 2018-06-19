@@ -47,7 +47,7 @@ class BlogHome extends PolymerElement {
         <main>
           <template is="dom-repeat" items={{posts}} 
             as=post index-as=index>
-            <blog-card post="[[post]]" on-fire-transition="dispatchTransition"></blog-card>
+            <blog-card post="[[post]]"></blog-card>
           </template>
         </main>
       </section>
@@ -69,12 +69,28 @@ class BlogHome extends PolymerElement {
             {slug: "/posts/some-post-slug-url-2", title: "Cillum tempor esse aliquip adipisicing amet enim dolore sunt in quis in pariatur.", author: "Syu93", date: Date.now() - 2*24*60*60*1000, readTime: 12, body: "plop is the new plop "},
             {slug: "/posts/some-post-slug-url-3", title: "Exercitation culpa quis in sint eu proident consectetur quis ea voluptate.", author: "Syu93", date: Date.now() - 3*24*60*60*1000, readTime: 12, body: "In dolore sed laboris veniam amet voluptate in excepteur eiusmod adipisicing eu fugiat incididunt est dolore ea cillum in et ullamco proident ea commodo occaecat ut."},
             {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
+            {slug: "/posts/some-post-slug-url-4", title: "Sit nulla dolor amet eiusmod culpa eu dolore dolor dolore eu.", author: "Syu93", date: Date.now() - 4*24*60*60*1000, readTime: 12, body: "Anim et fugiat eu et tempor sed minim officia et excepteur aute sit."},
           ]
       }
     };
   }
-
-  dispatchTransition(e, detail) { this.dispatchEvent(new CustomEvent('fire-transition', {detail: detail})); }
 
   _log(value) {
     console.log(value);

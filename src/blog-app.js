@@ -10,6 +10,7 @@
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
+import { scroll } from '@polymer/app-layout/helpers/helpers.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -61,6 +62,13 @@ class BlogApp extends PolymerElement {
           pointer-events: auto;
           background-color: var(--app-header-background-color);
         }
+
+        :host(:not([page="home"])) [drawer-toggle] {
+          display: none;
+        }
+
+        :host([page="home"]) [back-home] { display: none; }
+        :host(:not([page="home"])) [back-home] { display: block; }
 
         app-header a {
           color: var(--app-header-text-color);
@@ -131,15 +139,46 @@ class BlogApp extends PolymerElement {
         }
 
         :host([page="posts"]) app-header[shadow] { background-color: rgba(0, 0, 0, 0.48); }
-        :host([page="posts"]) [main-title] a { color: #ffffff; }
+        :host([page="posts"]) [main-title] a, :host([page="posts"]) [back-home] { color: #ffffff; }
         :host([page="posts"]) [main-title] {
           background-color: transparent;
         }
 
+        /* Page animation */
+        .animated {
+          animation-duration: 0.4s;
+        }
+
+        .p-enter { animation-name: p-enter; }
+        .p-leave { animation-name: p-leave; }
+
+        @keyframes p-enter {
+          from {
+            transform: translate(100vw, 0);
+          }
+          to {
+            transform: translate(0, 0);
+          }
+        }
+
+        @keyframes p-leave {
+          from {
+            transform: translate(-100vw, 0);
+          }
+          to {
+            transform: translate(0, 0);
+          }
+        }
+
+        /* Page animation */
+
+        /*iron-pages blog-posts { transform: translate(100vw, 0); }
+        iron-pages blog-posts[isready].iron-selected { transform: translate(0, 0); }*/
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-          app-header paper-icon-button[drawer-toggle] {
+          app-header paper-icon-button[drawer-toggle], :host(:not([page="home"])) app-header [back-home] {
             display: none;
           }
 
@@ -175,16 +214,19 @@ class BlogApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="home" href="[[rootPath]]home">View One</a>
+            <a name="home" href="[[rootPath]]home" title="Home">Home</a>
+            <a href="">Projects</a>
+            <a href="">About</a>
           </iron-selector>
         </app-drawer>
 
         <!-- Main content -->
-        <app-header-layout has-scrolling-region="">
+        <app-header-layout >
 
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
+              <a href="/" alt="Back home" back-home=""><paper-icon-button icon="my-icons:arrow-back"></paper-icon-button></a>
               <div main-title><a href="/" title="My Simple Blog">My Simple Blog</a></div>
             </app-toolbar>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
@@ -195,8 +237,8 @@ class BlogApp extends PolymerElement {
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <blog-home name="home" route="[[subroute]]" on-fire-transition="handleTransition"></blog-home>
-            <blog-posts name="posts" route="[[subroute]]"></blog-posts>
+            <blog-home name="home" route="[[subroute]]" data-animation="p-leave"></blog-home>
+            <blog-posts name="posts" route="[[subroute]]" data-animation="p-enter"></blog-posts>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
         </app-header-layout>
@@ -247,6 +289,8 @@ class BlogApp extends PolymerElement {
       this.page = 'view404';
     }
 
+    scroll({ top: 0, behavior: 'silent' });
+
     // Close a non-persistent drawer when the page & route are changed.
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
@@ -271,11 +315,16 @@ class BlogApp extends PolymerElement {
         import('./my-view404.js');
         break;
     }
-  }
 
-  handleTransition(e, detail) {
-    this.set('postMode', true);
-    console.log(detail);
+    const selectedPage = this.shadowRoot.querySelector('iron-pages .iron-selected');
+    // If no page selected e.g : if we are on this home page
+    if (!selectedPage) return;
+
+    if (!selectedPage.classList.contains('animated')) {
+      selectedPage.classList.add('animated');
+      selectedPage.classList.add(selectedPage.dataset.animation || "p-enter");
+    }
+
   }
 }
 

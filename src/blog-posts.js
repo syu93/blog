@@ -14,6 +14,10 @@ class BlogPosts extends PolymerElement {
           left: 0;
           right: 0;
           bottom: 0;
+          background-color: #f7f7f7;
+        }
+
+        article {
           transform: translate(0, -64px);
         }
 
@@ -35,7 +39,7 @@ class BlogPosts extends PolymerElement {
         header figure {
           margin: 0;
           padding: 0;
-          height: 60vh;
+          height: 80vh;
         }
 
         header figure iron-image {
@@ -135,7 +139,7 @@ class BlogPosts extends PolymerElement {
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-          :host {
+          :host article{
             transform: translate(0, 0);
           }
 
