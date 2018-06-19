@@ -169,11 +169,7 @@ class BlogApp extends PolymerElement {
             transform: translate(0, 0);
           }
         }
-
         /* Page animation */
-
-        /*iron-pages blog-posts { transform: translate(100vw, 0); }
-        iron-pages blog-posts[isready].iron-selected { transform: translate(0, 0); }*/
 
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
@@ -316,10 +312,13 @@ class BlogApp extends PolymerElement {
         break;
     }
 
+    const pages = this.shadowRoot.querySelector('iron-pages').children;
     const selectedPage = this.shadowRoot.querySelector('iron-pages .iron-selected');
     // If no page selected e.g : if we are on this home page
     if (!selectedPage) return;
 
+    // Remove animation class from all
+    for (let page of pages) page.classList.remove('animated');
     if (!selectedPage.classList.contains('animated')) {
       selectedPage.classList.add('animated');
       selectedPage.classList.add(selectedPage.dataset.animation || "p-enter");
