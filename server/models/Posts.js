@@ -7,12 +7,15 @@ module.exports = (app) => {
       type: Sequelize.STRING,
       unique: true
     },
-    enabled: {
+    summary: Sequelize.STRING,
+    body: Sequelize.STRING,
+    type: Sequelize.ENUM('page', 'post'),
+    published: {
       type: Sequelize.BOOLEAN,
       allowNull: false, 
       defaultValue: false
     }
   };
 
-  return app.sequelize.define('Sites', Sites);
+  return app.sequelize.define('Posts', Posts);
 };

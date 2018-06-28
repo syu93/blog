@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const sha1 = require('sha1');
 
 module.exports = (app) => {
 
@@ -20,17 +21,23 @@ module.exports = (app) => {
   });
 
   app.models = {
-    
+    Posts: require('./Posts.js')(app),
+    Users: require('./Users.js')(app),
   };
 
   app.sequelize
     .authenticate()
     .then(() => {
+      app.models.Posts.belongsTo(app.models.Users, {foreignKey: 'user_id', as: 'Authors'});
+      app.models.Users.hasMany(app.models.Posts, {foreignKey: 'user_id', as: 'Authors'});
+    })
+    .then(() => {
       console.log('[Server] Connection has been established successfully.');
+      app.sequelize.sync({force: true}).then(() => {
+        app.models.Users.findOrCreate({where: {email: "test@gmail.com"}, defaults: {name: "Syu93", email: "test@gmail.com", password: sha1(app.settings.security.password)}});
+      });
     })
     .catch(err => {
       console.error('[Server] Unable to connect to the database:', err);
     });
-
-  app.sequelize.sync({force: false});
 };
