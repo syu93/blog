@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import './blog-posts-comment.js';
 
 class BlogPostsRead extends PolymerElement {
   static get template() {
@@ -127,7 +128,7 @@ class BlogPostsRead extends PolymerElement {
 
         [hidden] {display: none !important;}
 
-        .left-space { margin-left: 0.3em; }
+        .left-space { margin-left: 0.6em; }
 
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
@@ -172,6 +173,7 @@ class BlogPostsRead extends PolymerElement {
           <section class="social-network"><a href="#">Share</a></section>
           <div id="content"></div>
         </main>
+        <blog-posts-comment config="[[config]]"><slot></slot></blog-posts-comment>
       </article>
     `;
   }
@@ -207,6 +209,12 @@ class BlogPostsRead extends PolymerElement {
     if (!this.post.summary) { return this.set('mode', 'page'); }
     
     this.$.summary.textContent = this.post.summary;
+
+    this.set('config', {
+      slug: this.post.slug,
+      identifier: this.post.id,
+      domain: "https://heraku.disqus.com",
+    });
   }
 
   _isPost(mode) { return mode == "post" ? true : false; }
