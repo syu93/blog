@@ -24,12 +24,13 @@ class BlogPosts extends PolymerElement {
         data="{{routePostData}}" tail="{{subroute}}">
       </app-route>
       <app-route
-        route="{{route}}"
+        route="{{subroute}}"
         pattern="/:mode"
-        data="{{routeData}}" tail="{{subroute}}">
+        data="{{routeModeData}}">
       </app-route>
       <iron-pages selected="[[mode]]" attr-for-selected="name">
-        <blog-posts-read name="[[mode]]" post=[[post]]><slot name="comments"></slot></blog-posts-read>
+        <blog-posts-read name="read" post="[[post]]"><slot name="comments"></slot></blog-posts-read>
+        <blog-posts-edit name="edit" post="[[post]]"></blog-posts-edit>
       </iron-pages>
     `;
   }
@@ -53,7 +54,7 @@ class BlogPosts extends PolymerElement {
   static get observers() {
     return [
       '_routePostChanged(routePostData.post)',
-      '_routeModeChanged(routeModeData.post)'
+      '_routeModeChanged(routeModeData.mode)'
     ];
   }
 
@@ -69,13 +70,14 @@ class BlogPosts extends PolymerElement {
       // Trigger navigation to the 404 page
       return window.dispatchEvent(new CustomEvent('location-changed'));
     }
-
-    // FIXME: get post from API
-    this.set('mode', 'read');
   }
 
   _routeModeChanged(mode) {
-    console.log(mode);
+    // FIXME: check if user is logged in
+    this.mode = mode || 'read';
+    if (this.mode == "edit") {
+      return import('./blog-posts-edit.js');
+    }
   }
 
 }
