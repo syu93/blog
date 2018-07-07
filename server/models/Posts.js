@@ -7,8 +7,17 @@ module.exports = (app) => {
       type: Sequelize.STRING,
       unique: true
     },
+    // Cover image mode : cover | contain
+    cover: Sequelize.STRING,
+    // Cover image position : top | center | bottom
+    position: Sequelize.STRING,
+    // Cover image name
+    image: Sequelize.STRING,
+    // Cover image b64 placeholder
+    placeholder: Sequelize.TEXT,
     summary: Sequelize.STRING,
-    body: Sequelize.STRING,
+    body: Sequelize.TEXT,
+    readTime: Sequelize.INTEGER,
     type: Sequelize.ENUM('page', 'post'),
     published: {
       type: Sequelize.BOOLEAN,
