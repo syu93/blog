@@ -3,5 +3,6 @@ module.exports = (app) => {
     app: require('./app')(app),
     posts: require('./posts')(app),
     auth: require('./auth')(app),
+    media: require('./media')(app),
   }
 };
