@@ -1,3 +1,5 @@
 build/
 node_modules/
 server/config/config-dev.json
+server/uploads/
+config.js

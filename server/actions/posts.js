@@ -21,15 +21,21 @@ module.exports = (app) => {
    */
   async function create(req, res, next) {
     try {
-      if (!req.userEmail) throw 'Error, no user found';
-      const user = await Users.findOne({where: {email: req.userEmail}})
+      if (!req.body.author) throw 'Error, no user found';
+      console.log(req.body.author);
+      const user = await Users.findOne({where: {email: req.body.author}})
       const post = await Posts.create({
         title: req.body.title,
         slug: req.body.slug,
-        summary: req.body.summary,
+        summary: req.body.summary || "",
         body: req.body.body,
+        image: req.body.image,
+        placeholder: req.body.placeholder,
+        cover: req.body.cover,
+        position: req.body.position,
+        readTime: req.body.readTime,
         type: req.body.type || 'post',
-        published: req.body.published || 0,
+        published: req.body.published || false,
         user_id: user.id
       })
       return res.json(post);

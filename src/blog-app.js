@@ -237,6 +237,7 @@ class BlogApp extends PolymerElement {
             <blog-posts name="posts" route="[[subroute]]" data-animation="p-enter">
               <div slot="comments"><slot name="disqus"></slot></div>
             </blog-posts>
+            <blog-create name="create"></blog-create>
             <my-view404 name="view404" data-animation="none"></my-view404>
           </iron-pages>
         </app-header-layout>
@@ -283,6 +284,8 @@ class BlogApp extends PolymerElement {
       this.page = page;
     } else if (['posts'].indexOf(page) !== -1) {
       this.page = page;
+    } else if (['create'].indexOf(page) !== -1) {
+      this.page = page;
     } else {
       this.page = 'view404';
     }
@@ -303,10 +306,14 @@ class BlogApp extends PolymerElement {
     switch (page) {
       case 'home':
         import('./blog-home.js')
-          // .catch(err => console.error(`[Router] ${err}`));
+          .catch(err => console.error(`[Router] ${err}`));
         break;
       case 'posts':
         import('./blog-posts.js')
+          // .catch(err => console.error(`[Router] ${err}`));
+        break;
+      case 'create':
+        import('./blog-create.js')
           // .catch(err => console.error(`[Router] ${err}`));
         break;
       case 'view404':

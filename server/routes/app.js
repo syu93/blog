@@ -9,6 +9,7 @@ module.exports = (app) => {
   app.use('/src', express.static(__dirname + '/../../src'));
   app.use('/node_modules', express.static(__dirname + '/../../node_modules'));
   app.use('/images', express.static(__dirname + '/../../images'));
+  app.use('/uploads', express.static(__dirname + '/../uploads'));
 
   router.get('*', app.actions.app.app);
   return router;
