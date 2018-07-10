@@ -50,6 +50,9 @@ class BlogHome extends PolymerElement {
             <blog-card post="[[post]]"></blog-card>
           </template>
         </main>
+        <template is="dom-if" if={{user.id}}>
+          <blog-fab on-click="createNewPost"></blog-fab>
+        </template>
       </section>
     `;
   }
@@ -90,6 +93,12 @@ class BlogHome extends PolymerElement {
           ]
       }
     };
+  }
+
+  createNewPost() {
+    window.history.pushState({}, '', '/create');
+    // Trigger navigation
+    return window.dispatchEvent(new CustomEvent('location-changed'));
   }
 
   _log(value) {

@@ -175,6 +175,9 @@ class BlogPostsRead extends PolymerElement {
         </main>
         <blog-posts-comment config="[[config]]"><slot></slot></blog-posts-comment>
       </article>
+      <template is="dom-if" if={{user.id}}>
+        <blog-fab tooltip="Edit post" on-click="editPost"></blog-fab>
+      </template>
     `;
   }
 
@@ -200,6 +203,13 @@ class BlogPostsRead extends PolymerElement {
     super.ready();
     this.$.summary.textContent = this.post.summary;
     this.$.content.innerHTML = this.post.body;
+  }
+
+  editPost() {
+    if (window.sessionStorage.getItem('token')) {
+      window.history.pushState({}, '', this.post.slug + "/edit");
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    };
   }
 
   _postChanged(post) {

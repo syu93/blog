@@ -263,7 +263,7 @@ class BlogApp extends PolymerElement {
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <blog-home name="home" route="[[subroute]]" user="[[user]]" data-animation="p-leave"></blog-home>
-            <blog-posts name="posts" route="[[subroute]]" data-animation="p-enter">
+            <blog-posts name="posts" route="[[subroute]]" user="[[user]]" data-animation="p-enter">
               <div slot="comments"><slot name="disqus"></slot></div>
             </blog-posts>
             <blog-create name="create"></blog-create>

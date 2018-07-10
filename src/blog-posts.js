@@ -29,7 +29,7 @@ class BlogPosts extends PolymerElement {
         data="{{routeModeData}}">
       </app-route>
       <iron-pages selected="[[mode]]" attr-for-selected="name">
-        <blog-posts-read name="read" post="[[post]]"><slot name="comments"></slot></blog-posts-read>
+        <blog-posts-read name="read" post="[[post]]" user="[[user]]"><slot name="comments"></slot></blog-posts-read>
         <blog-posts-edit name="edit" post="[[post]]"></blog-posts-edit>
       </iron-pages>
     `;
