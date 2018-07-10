@@ -33,6 +33,10 @@ class BlogCreate extends PolymerElement {
 
   ready() {
     super.ready();
+    if (!window.sessionStorage.getItem('token')) {
+      window.history.pushState({}, '', '/');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    };
     this.set('isready', true);
   }
 

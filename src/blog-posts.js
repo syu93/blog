@@ -73,6 +73,14 @@ class BlogPosts extends PolymerElement {
   }
 
   _routeModeChanged(mode) {
+    // Check if mode is edit and the user to have a token
+    if (mode == "edit" && !window.sessionStorage.getItem('token')) {
+      window.history.pushState({}, '', '/posts/' + this.routePostData.post);
+      window.dispatchEvent(new CustomEvent('location-changed'));
+
+      // FIXME : Toast show : not allowed to this section
+      return this.mode = "read";
+    };
     // FIXME: check if user is logged in
     this.mode = mode || 'read';
     if (this.mode == "edit") {

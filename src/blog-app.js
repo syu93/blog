@@ -23,6 +23,9 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
+import './blog-login-modal.js';
+import './blog-toast.js';
+import './blog-fab.js';
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
@@ -171,6 +174,25 @@ class BlogApp extends PolymerElement {
         }
         /* Page animation */
 
+        .user-account { display: inline-block; }
+
+        app-drawer .user-account {
+          display: block;
+          padding: 0 16px;
+          text-decoration: none;
+          color: var(--app-secondary-color);
+          line-height: 40px;
+        }
+
+        app-drawer .user-account a { display: inline-block; padding: 0 }
+
+        .user-account .username {
+          font-weight: bold;
+          color: var(--app-primary-color);
+        }
+
+
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
@@ -189,7 +211,6 @@ class BlogApp extends PolymerElement {
           iron-selector.links {
             display: block;
           }
-          
 
           /* The drawer button isn't shown in the wide layout, so we don't
           need to offset the title */
@@ -213,6 +234,10 @@ class BlogApp extends PolymerElement {
             <a name="home" href="[[rootPath]]home" title="Home">Home</a>
             <a href="">Projects</a>
             <a href="">About</a>
+            <div class="user-account">
+              <template is="dom-if" if={{user.id}}><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></template>
+              <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+            </div>
           </iron-selector>
         </app-drawer>
 
@@ -229,17 +254,26 @@ class BlogApp extends PolymerElement {
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
               <a href="">Projects</a>
               <a href="">About</a>
+              <div class="user-account">
+                <template is="dom-if" if={{user.id}}><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></template>
+                <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+              </div>
             </iron-selector>
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <blog-home name="home" route="[[subroute]]" data-animation="p-leave"></blog-home>
+            <blog-home name="home" route="[[subroute]]" user="[[user]]" data-animation="p-leave"></blog-home>
             <blog-posts name="posts" route="[[subroute]]" data-animation="p-enter">
               <div slot="comments"><slot name="disqus"></slot></div>
             </blog-posts>
             <blog-create name="create"></blog-create>
             <my-view404 name="view404" data-animation="none"></my-view404>
           </iron-pages>
+
+          <!-- Login modal -->
+          <blog-login-modal id="login" user="{{user}}"
+            on-login-error="loginChanged"></blog-login-modal>
+          <blog-toast id="toast" message="[[message]]"></blog-toast>
         </app-header-layout>
       </app-drawer-layout>
     `;
@@ -258,7 +292,10 @@ class BlogApp extends PolymerElement {
         observer: '_pageChanged'
       },
       routeData: Object,
-      subroute: Object
+      subroute: Object,
+      user: {
+        type: Object
+      }
     };
   }
 
@@ -271,6 +308,27 @@ class BlogApp extends PolymerElement {
   ready() {
     super.ready();
     this.set('unresolved', false);
+
+    // Listen for global login events
+    window.addEventListener('login-success', (e) => {
+      this.loginChanged(e, e.detail);
+    });
+  }
+
+  login(e) {
+    e.preventDefault();
+    this.$.login.display();
+  }
+
+  loginChanged(e, detail) {
+    if (!detail.message) return;
+    this.message = detail.message;
+    this.$.toast.show();
+  }
+
+  logout(e) {
+    e.preventDefault();
+    this.$.login.logout();
   }
 
   _routePageChanged(page) {
