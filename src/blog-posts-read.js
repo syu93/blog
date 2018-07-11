@@ -153,17 +153,21 @@ class BlogPostsRead extends PolymerElement {
       </style>
       <article>
         <header>
-          <figure><iron-image src="/images/dataset-original.jpg"
+          <figure><iron-image
+            src="http://localhost:8080/uploads/[[post.image]]"
+            placeholder="[[post.placeholder]]"
             preload
-            sizing="cover"></iron-image></figure>
+            fade
+            sizing="[[post.cover]]"
+            position="[[post.position]]"></iron-image></figure>
           <div class="filter">
-            <h1>[[post.title]]!</h1>
+            <h1>[[post.title]]</h1>
             <div class="meta">
               <div class="author-ctn">
                 <iron-image src="" preload sizing="cover"></iron-image>
               </div>
-              <span class="left-space">[[post.author]]</span>
-              <blog-time date="[[post.date]]"></blog-time>
+              <span class="left-space">[[post.Authors.name]]</span>
+              <blog-time date="[[post.createdAt]]"></blog-time>
               <span class="align-right">[[post.readTime]] minutes</span>
             </div>
           </div>
@@ -189,6 +193,10 @@ class BlogPostsRead extends PolymerElement {
       mode: {
         type: String,
         value: "post"
+      },
+      _config: {
+        type: Object,
+        value: () => {return window.config}
       }
     };
   }
@@ -201,8 +209,6 @@ class BlogPostsRead extends PolymerElement {
 
   ready() {
     super.ready();
-    this.$.summary.textContent = this.post.summary;
-    this.$.content.innerHTML = this.post.body;
   }
 
   editPost() {
@@ -218,12 +224,12 @@ class BlogPostsRead extends PolymerElement {
     
     if (!this.post.summary) { return this.set('mode', 'page'); }
     
-    this.$.summary.textContent = this.post.summary;
+    this.$.summary.innerHTML = this.post.summary;
 
     this.set('config', {
       slug: this.post.slug,
       identifier: this.post.id,
-      domain: "https://heraku.disqus.com",
+      domain: this._config.disqus.domain,
     });
   }
 

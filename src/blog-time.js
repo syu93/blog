@@ -17,22 +17,21 @@ class BlogTime extends PolymerElement {
           margin-right: .4rem;
         }
       </style>
-      <time datetime$="seconds: [[date]]">[[getDate()]]</time>
+      <time datetime$="seconds: [[date]]">[[getDate(date)]]</time>
     `;
   }
 
   static get properties() {
     return {
       date: {
-        type: Number
+        type: String,
+        value: "",
       }
     };
   }
 
   // FIXME : Replace with direct call in LitElement
-  getDate() {
-    return timeago().format(this.date)
-  }
+  getDate(date) { return timeago().format(date) }
 }
 
 window.customElements.define('blog-time', BlogTime);

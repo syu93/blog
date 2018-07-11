@@ -93,7 +93,6 @@ class BlogCard extends PolymerElement {
           flex-wrap: nowrap;
         }
 
-
         .flex-row-center {
           display: flex;
           justify-content: space-between;
@@ -156,18 +155,21 @@ class BlogCard extends PolymerElement {
         }
       </style>
         <article>
-          <a href$="[[post.slug]]" title$="[[post.title]]"></a>
+          <a href$="/posts/[[post.slug]]" title$="[[post.title]]"></a>
           <header>
-            <h1><a href$="[[post.slug]]">[[post.title]]</a></h1>
+            <h1><a href$="/posts/[[post.slug]]">[[post.title]]</a></h1>
             <div class="flex-row-center">
-              <span class="author-time flex-row">[[post.author]]<blog-time date="[[post.date]]"></blog-time></span>
+              <span class="author-time flex-row">[[post.Authors.name]]<blog-time date="[[post.createdAt]]"></blog-time></span>
               <span class="read-time">[[post.readTime]] minutes</span>
             </div>
           </header>
           <!-- FIXME : add b64 placeholder -->
-          <figure><a href$="[[post.slug]]"><iron-image
-            src="http://placehold.it/720/4285f4"
-            preload sizing="cover"></iron-image><figcaption></figcaption></a></figure>
+          <figure><a href$="/posts/[[post.slug]]"><iron-image
+            src="http://localhost:8080/uploads/[[post.image]]"
+            placeholder="[[post.placeholder]]"
+            preload 
+            fade
+            sizing="cover"></iron-image><figcaption></figcaption></a></figure>
         </article>
     `;
   }
