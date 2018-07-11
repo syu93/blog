@@ -10,5 +10,6 @@
   "security": {
     "salt": "",
     "password": ""
-  }
+  },
+  "allowedOrigins": ""
 }
