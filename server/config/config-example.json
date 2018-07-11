@@ -4,7 +4,8 @@
     "host": "",
     "name": "",
     "user": "",
-    "password": ""
+    "password": "",
+    "sync": ""
   },
   "security": {
     "salt": "",

@@ -33,7 +33,7 @@ module.exports = (app) => {
     })
     .then(() => {
       console.log('[Server] Connection has been established successfully.');
-      app.sequelize.sync({force: true}).then(() => {
+      app.sequelize.sync({force: app.settings.database.sync}).then(() => {
         app.models.Users.findOrCreate({where: {email: "test@gmail.com"}, defaults: {name: "Syu93", email: "test@gmail.com", password: sha1(app.settings.security.password)}});
       });
     })
