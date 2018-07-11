@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.get('/:slug?', app.actions.posts.read);
   router.post('/create', 
     app.middlewares.ensureAuth,
+    app.middlewares.bodyParser({limit: '5mb'}),
     app.middlewares.bodyParser.json(),
     app.middlewares.ensureFields(['title', 'summary', 'body', 'type']),
     app.actions.posts.create);
