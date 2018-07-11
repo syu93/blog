@@ -391,8 +391,12 @@ class BlogPostsEdit extends PolymerElement {
     }
 
     this.$.xhr.url = "http://localhost:8080/api/posts/create";
+    if (this.post.id)
+      this.$.xhr.url = "http://localhost:8080/api/posts/update/" + this.post.slug;
+    // CORS
+    this.$.xhr.withCredentials = true;
     this.$.xhr.method = "post";
-    this.$.xhr.headers = {"Content-Type": "application/json"},
+    this.$.xhr.headers = {"Content-Type": "application/json", "Authorization": window.sessionStorage.getItem('token')},
     this.$.xhr.body = this.post;
 
     this.$.xhr.generateRequest();
@@ -404,21 +408,22 @@ class BlogPostsEdit extends PolymerElement {
   }
 
   handleResponse(e, detail) {
-    console.log(e.detail.__data);
     this.toastMessage = "Post successfully created !";
     this.$.toast.show();
+    this.set('error', false);
   }
 
   toastClosed(e) {
+    if (this.error) return;
     window.history.pushState({}, '', '/posts' + this.post.slug);
-    // Trigger navigation
+    // // Trigger navigation
     return window.dispatchEvent(new CustomEvent('location-changed'));
   }
 
   handleError(e) {
-    console.log(e.detail.error);
     this.toastMessage = e.detail.error;
     this.$.toast.show();
+    this.set('error', true);
   }
 
   updateSummary(e, detail) {
@@ -460,7 +465,7 @@ class BlogPostsEdit extends PolymerElement {
   }
 
   _titleChanged(title) {
-    this.set('post.slug', `/${this._slugify(title)}`);
+    this.set('post.slug', this._slugify(title));
   }
 
   _postChanged(post) {
