@@ -29,6 +29,7 @@ class BlogPosts extends PolymerElement {
         data="{{routeModeData}}">
       </app-route>
       <iron-ajax
+         id="ajax"
          auto
          url$="http://localhost:8080/api/posts/[[slug]]"
          handle-as="json"
@@ -76,6 +77,8 @@ class BlogPosts extends PolymerElement {
       return window.dispatchEvent(new CustomEvent('location-changed'));
     }
     this.set('slug', post);
+    this.$.ajax.generateRequest();
+    if (!this.mode) this.set('mode', "read")
   }
 
   _routeModeChanged(mode) {
