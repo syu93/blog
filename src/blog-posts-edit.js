@@ -208,7 +208,7 @@ class BlogPostsEdit extends PolymerElement {
 
         label { font-size: 1.2em; padding-left: 16px; vertical-align: text-top;}
 
-        .slug input {
+        .slug input[type="text"] {
           background-color: #ffffff;
           color: var(--app-secondary-color);
           margin-left: 1em;
@@ -219,7 +219,14 @@ class BlogPostsEdit extends PolymerElement {
           border-bottom: solid 2px var(--app-primary-color);
         }
 
-        .read-time input.time {
+        .slug input[type="text"][readonly] {border-bottom: none;}
+
+        .slug input[type="checkbox"] {
+          height: 16px;
+          width: 16px;
+        }
+
+        .read-time input[type="number"].time {
           display: inline-block;
           background-color: transparent;
           color: #ffffff;
@@ -326,7 +333,8 @@ class BlogPostsEdit extends PolymerElement {
         </div>
         <main ispage$="[[!_isPost(mode)]]">
           <section class="slug">
-            <label>Slug : / </label><input type="text" name="slug" value="{{post.slug::input}}" placeholder="post-slug-url">            
+            <label>Slug : / </label><input type="text" name="slug" value="{{post.slug::input}}" placeholder="post-slug-url" readonly$="[[!slugEdit]]">
+            <input type="checkbox" checked="{{slugEdit::change}}">
           </section>
           <section hidden$="[[!_isPost(mode)]]">
             <label>Summary :</label>
@@ -359,6 +367,7 @@ class BlogPostsEdit extends PolymerElement {
         }
       },
       oldSlug: String,
+      slugEdit: {type: Boolean, value: false},
       mode: {
         type: String,
         value: "post"
@@ -463,6 +472,7 @@ class BlogPostsEdit extends PolymerElement {
   }
 
   _titleChanged(title) {
+    if (this.post.id && !this.slugEdit) return;
     this.set('post.slug', this._slugify(title));
   }
 
