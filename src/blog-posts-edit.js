@@ -358,6 +358,7 @@ class BlogPostsEdit extends PolymerElement {
           }
         }
       },
+      oldSlug: String,
       mode: {
         type: String,
         value: "post"
@@ -392,30 +393,27 @@ class BlogPostsEdit extends PolymerElement {
 
     this.$.xhr.url = "http://localhost:8080/api/posts/create";
     if (this.post.id)
-      this.$.xhr.url = "http://localhost:8080/api/posts/update/" + this.post.slug;
+      this.$.xhr.url = "http://localhost:8080/api/posts/update/" + this.oldSlug;
     // CORS
     this.$.xhr.withCredentials = true;
     this.$.xhr.method = "post";
+    if (this.post.id) this.$.xhr.method = "put";
     this.$.xhr.headers = {"Content-Type": "application/json", "Authorization": window.sessionStorage.getItem('token')},
     this.$.xhr.body = this.post;
 
     this.$.xhr.generateRequest();
   }
 
-  testToast() {
-    this.toastMessage = "plop is the new plop";
-    this.$.toast.show();
-  }
-
   handleResponse(e, detail) {
-    this.toastMessage = "Post successfully created !";
+    this.toastMessage = "Post successfully saved !";
     this.$.toast.show();
     this.set('error', false);
   }
 
   toastClosed(e) {
     if (this.error) return;
-    window.history.pushState({}, '', '/posts' + this.post.slug);
+    // FIXME : Little tick to trigger page chage
+    window.history.pushState({}, '', `/posts/${this.post.slug}${this.post.id ? '/read' : ''}`);
     // // Trigger navigation
     return window.dispatchEvent(new CustomEvent('location-changed'));
   }
@@ -470,6 +468,7 @@ class BlogPostsEdit extends PolymerElement {
 
   _postChanged(post) {
     this.set('mode', 'post');
+    if (!this.oldSlug) this.set('oldSlug', this.post.slug);
     if (this.post.type == "page") { return this.set('mode', 'page'); }
   }
 
