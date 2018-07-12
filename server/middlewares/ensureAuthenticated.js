@@ -21,11 +21,10 @@ module.exports = (app) => {
         jwt.verify(authorization,
           app.settings.security.salt,
           (err, decryptedToken) => {
-            if (err){
-              return reject(err)
+            if (err) {
+              return reject(err);
             }
-
-            return resolve(decryptedToken)
+            return resolve(decryptedToken);
           });
       })
     }

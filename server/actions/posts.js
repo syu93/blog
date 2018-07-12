@@ -82,9 +82,15 @@ module.exports = (app) => {
         return post.update({
           title: req.body.title,
           slug: req.body.slug,
-          summary: req.body.summary,
+          summary: req.body.summary || "",
           body: req.body.body,
-          published: req.body.published || 0,
+          image: req.body.image,
+          placeholder: req.body.placeholder,
+          cover: req.body.cover,
+          position: req.body.position,
+          readTime: req.body.readTime,
+          type: req.body.type || 'post',
+          published: req.body.published || false,
         });
       })
       .then(post => {
