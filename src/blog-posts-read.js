@@ -213,7 +213,7 @@ class BlogPostsRead extends PolymerElement {
 
   editPost() {
     if (window.sessionStorage.getItem('token')) {
-      window.history.pushState({}, '', this.post.slug + "/edit");
+      window.history.pushState({}, '', `/posts/${this.post.slug}/edit`);
       window.dispatchEvent(new CustomEvent('location-changed'));
     };
   }
