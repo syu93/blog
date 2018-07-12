@@ -61,9 +61,9 @@ class BlogLoginModal extends PolymerElement {
         }
 
         .modal main div.login {
-          position: absolute;
           bottom: 0;
           right: 0;
+          left: 0;
           display: flex;
           flex-wrap: wrap;
           justify-content: flex-end;
@@ -106,6 +106,11 @@ class BlogLoginModal extends PolymerElement {
           border-bottom: solid 2px var(--app-primary-color);
         }
 
+        form {
+          position: relative;
+          height: 100%;
+        }
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
@@ -121,8 +126,9 @@ class BlogLoginModal extends PolymerElement {
             padding: 3em;
           }
 
-          .modal main button.paper-button {
-            width: auto;
+          .modal main div.login {
+            position: absolute;
+            flex-wrap: nowrap;
           }
         }
       </style>
