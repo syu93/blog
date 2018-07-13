@@ -248,7 +248,7 @@ class BlogApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <a href="/" alt="Back home" back-home=""><paper-icon-button icon="my-icons:arrow-back"></paper-icon-button></a>
-              <div main-title><a href="/" title="My Simple Blog">My Simple Blog</a></div>
+              <div main-title><a href="/" title="My Simple Blog">Heraku Blog</a></div>
             </app-toolbar>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
