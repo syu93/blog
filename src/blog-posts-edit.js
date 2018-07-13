@@ -256,6 +256,13 @@ class BlogPostsEdit extends PolymerElement {
           color: #ffffff;
         }
 
+        .fab.cancel {
+          bottom: 7em;
+          right: 3em;
+          background-color: #de3737;
+          color: #ffffff;
+        }
+
         main[ispage] {
           transform: translate(0, 0) !important;
         }
@@ -348,6 +355,7 @@ class BlogPostsEdit extends PolymerElement {
       </article>
       <!-- <button class="paper-button fab validate" on-click="testToast">Test</button> -->
       <button class="paper-button fab validate" on-click="savePost">Save [[mode]]</button>
+      <button class="paper-button fab cancel" on-click="cancelEdit">Cancel</button>
       <blog-toast id="toast" message="[[toastMessage]]" on-toast-closed="toastClosed"></blog-toast>
     `;
   }
@@ -367,7 +375,10 @@ class BlogPostsEdit extends PolymerElement {
         }
       },
       oldSlug: String,
-      slugEdit: {type: Boolean, value: false},
+      slugEdit: {
+        type: Boolean,
+        value: false
+      },
       mode: {
         type: String,
         value: "post"
@@ -390,7 +401,14 @@ class BlogPostsEdit extends PolymerElement {
     super.ready();
     this.summaryActions = ['bold', 'underline'];
 
-    this.set('post.author', 'test@gmail.com');
+    const profile = JSON.parse(window.sessionStorage.getItem('profile'));
+    this.set('post.author', profile.email);
+
+
+    window.addEventListener('logout-success', () => {
+      window.history.pushState({}, '', '/');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    });
   }
 
   savePost(e) {
@@ -431,6 +449,13 @@ class BlogPostsEdit extends PolymerElement {
     this.toastMessage = e.detail.error;
     this.$.toast.show();
     this.set('error', true);
+  }
+
+  cancelEdit() {
+    let location = "/";
+    if (this.post.id) location = `/posts/${this.post.slug}`;
+    window.history.pushState({}, '', location);
+    return window.dispatchEvent(new CustomEvent('location-changed'));
   }
 
   updateSummary(e, detail) {

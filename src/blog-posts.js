@@ -59,8 +59,7 @@ class BlogPosts extends PolymerElement {
 
   static get observers() {
     return [
-      '_routePostChanged(routePostData.post)',
-      '_routeModeChanged(routeModeData.mode)'
+      '_routePostChanged(routePostData.post, routeModeData.mode)',
     ];
   }
 
@@ -69,7 +68,9 @@ class BlogPosts extends PolymerElement {
     this.set('isready', true);
   }
 
-  _routePostChanged(post) {
+  _routePostChanged(post, mode) {
+    // Manualy check for pathname if second parameter is not defined
+    if (window.location.pathname != `/posts/${this.post.slug}/edit`) mode = 'read';
     if (!post) {
       // If no post slug in URL return to 404 
       window.history.pushState({}, '404 not found', '/404');
@@ -78,19 +79,17 @@ class BlogPosts extends PolymerElement {
     }
     this.set('slug', post);
     this.$.ajax.generateRequest();
-    if (!this.mode) this.set('mode', "read")
-  }
 
-  _routeModeChanged(mode) {
+    if (!mode) this.set('mode', "read");
+
     // Check if mode is edit and the user to have a token
     if (mode == "edit" && !window.sessionStorage.getItem('token')) {
       window.history.pushState({}, '', '/posts/' + this.routePostData.post);
       window.dispatchEvent(new CustomEvent('location-changed'));
 
-      // FIXME : Toast show : not allowed to this section
       return this.mode = "read";
     };
-    // FIXME: check if user is logged in
+
     this.mode = mode || 'read';
     if (this.mode == "edit") {
       return import('./blog-posts-edit.js');
