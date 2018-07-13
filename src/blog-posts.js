@@ -3,6 +3,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-image/iron-image.js';
 import './blog-time.js';
 import './blog-posts-read.js';
+import './blog-meta.js';
 
 class BlogPosts extends PolymerElement {
   static get template() {
@@ -34,6 +35,7 @@ class BlogPosts extends PolymerElement {
          url$="http://localhost:8080/api/posts/[[slug]]"
          handle-as="json"
          last-response="{{post}}"></iron-ajax>
+      <blog-meta base="Heraku" title="[[post.title]]" description="[[post.summary]]" separator="😁" reversed></blog-meta>
       <iron-pages selected="[[mode]]" attr-for-selected="name">
         <blog-posts-read name="read" post="[[post]]" user="[[user]]"><slot name="comments"></slot></blog-posts-read>
         <blog-posts-edit name="edit" post="[[post]]" user="[[user]]"></blog-posts-edit>

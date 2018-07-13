@@ -226,6 +226,8 @@ class BlogApp extends PolymerElement {
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
       </app-route>
 
+      <blog-meta base="Heraku" title="[[_ucfirst(page)]]" description="[[page.description]]" separator="😁" reversed></blog-meta>
+
       <app-drawer-layout fullbleed="" narrow="{{narrow}}" force-narrow>
         <!-- Drawer content -->
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -391,6 +393,11 @@ class BlogApp extends PolymerElement {
       selectedPage.classList.add(selectedPage.dataset.animation || "p-enter");
     }
 
+  }
+
+  _ucfirst(string) {
+    if (string) return string.charAt(0).toUpperCase() + string.slice(1);
+    return '';
   }
 }
 
