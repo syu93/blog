@@ -3,7 +3,6 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-image/iron-image.js';
 import './blog-time.js';
 import './blog-posts-read.js';
-import './blog-meta.js';
 
 class BlogPosts extends PolymerElement {
   static get template() {
@@ -21,22 +20,19 @@ class BlogPosts extends PolymerElement {
       </style>
       <app-route
         route="{{route}}"
-        pattern="/:post"
+        pattern$="[[auth]]/:post/:mode"
         data="{{routePostData}}" tail="{{subroute}}">
       </app-route>
-      <app-route
-        route="{{subroute}}"
-        pattern="/:mode"
-        data="{{routeModeData}}">
-      </app-route>
       <iron-ajax
-         id="ajax"
+         id="xhr"
          auto
          url$="http://localhost:8080/api/posts/[[slug]]"
          handle-as="json"
          last-response="{{post}}"></iron-ajax>
-      <blog-meta base="Heraku" title="[[post.title]]" description="[[post.summary]]" separator="😁" reversed></blog-meta>
-      <iron-pages selected="[[mode]]" attr-for-selected="name">
+
+      <blog-meta id="meta" base="Heraku" title="[[post.title]]" description="[[post.metaDescription]]" separator="😁" reversed></blog-meta>
+
+      <iron-pages selected="[[mode]]" attr-for-selected="name" fallback-selection="read">
         <blog-posts-read name="read" post="[[post]]" user="[[user]]"><slot name="comments"></slot></blog-posts-read>
         <blog-posts-edit name="edit" post="[[post]]" user="[[user]]"></blog-posts-edit>
       </iron-pages>
@@ -49,8 +45,13 @@ class BlogPosts extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      user: {
+        type: Object,
+        value: () => {return {}}
+      },
       mode: {
         type: String,
+        observer: "_modeChanged"
       },
       post: {
         type: Object,
@@ -61,7 +62,7 @@ class BlogPosts extends PolymerElement {
 
   static get observers() {
     return [
-      '_routePostChanged(routePostData.post, routeModeData.mode)',
+      '_routePostChanged(routePostData.post, routePostData.mode)'
     ];
   }
 
@@ -70,34 +71,51 @@ class BlogPosts extends PolymerElement {
     this.set('isready', true);
   }
 
+  triggerMeta() {
+    this.$.meta.apply();
+  }
+
   _routePostChanged(post, mode) {
-    // Manualy check for pathname if second parameter is not defined
-    if (window.location.pathname != `/posts/${this.post.slug}/edit`) mode = 'read';
+    // If there is no post slug
     if (!post) {
       // If no post slug in URL return to 404 
       window.history.pushState({}, '404 not found', '/404');
       // Trigger navigation to the 404 page
       return window.dispatchEvent(new CustomEvent('location-changed'));
     }
+
+    if (!mode) {
+      this.mode = "read";
+    } else if (['edit'].indexOf(mode) !== -1) {
+      this.mode = "edit";
+    } else {
+      this.mode = "read";
+    }
+
+
+    // Set the slug to find the corresponding post
     this.set('slug', post);
-    this.$.ajax.generateRequest();
+    if (window.location.search) {
+      this.$.xhr.withCredentials = true;
+      this.$.xhr.headers = {"Content-Type": "application/json", "Authorization": window.sessionStorage.getItem('token')},
+      this.set('slug', 'all/' + post);
+    }
 
-    if (!mode) this.set('mode', "read");
+    // Perform the XHR request
+    // this.$.xhr.generateRequest();
+  }
 
+  _modeChanged(mode) {
     // Check if mode is edit and the user to have a token
     if (mode == "edit" && !window.sessionStorage.getItem('token')) {
       window.history.pushState({}, '', '/posts/' + this.routePostData.post);
       window.dispatchEvent(new CustomEvent('location-changed'));
-
       return this.mode = "read";
     };
 
-    this.mode = mode || 'read';
-    if (this.mode == "edit") {
-      return import('./blog-posts-edit.js');
-    }
+    if (mode == "edit") { return import('./blog-posts-edit.js'); }
   }
-
+ 
 }
 
 window.customElements.define('blog-posts', BlogPosts);

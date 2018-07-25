@@ -110,7 +110,7 @@ class BlogPostsRead extends PolymerElement {
         main {
           padding: 0.5em 1.2em;
           text-align: justify;
-          font-size: 1.2em;
+          font-size: 1.6em;
           background-color: #fefefe;
           z-index: 1;
         }
@@ -149,6 +149,10 @@ class BlogPostsRead extends PolymerElement {
             margin: 0.5em 15%;
             transform: translate(0, -100px);
           }
+
+          blog-posts-comment {
+            margin: 0.5em 15%;
+          }
         }
       </style>
       <article>
@@ -163,9 +167,6 @@ class BlogPostsRead extends PolymerElement {
           <div class="filter">
             <h1>[[post.title]]</h1>
             <div class="meta">
-              <div class="author-ctn">
-                <iron-image src="" preload sizing="cover"></iron-image>
-              </div>
               <span class="left-space">[[post.Authors.name]]</span>
               <blog-time date="[[post.createdAt]]"></blog-time>
               <span class="align-right">[[post.readTime]] minutes</span>
@@ -213,13 +214,14 @@ class BlogPostsRead extends PolymerElement {
 
   editPost() {
     if (window.sessionStorage.getItem('token')) {
-      window.history.pushState({}, '', `/posts/${this.post.slug}/edit`);
+      window.history.pushState({}, '', `/posts/${this.post.slug}/edit${window.location.search ? '?unpublished=1': ''}`);
       window.dispatchEvent(new CustomEvent('location-changed'));
     };
   }
 
   _postChanged(post) {
     this.set('mode', 'post');
+    if (!this.post) return;
     this.$.content.innerHTML = this.post.body;
     
     if (!this.post.summary) { return this.set('mode', 'page'); }

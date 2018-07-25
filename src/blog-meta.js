@@ -28,6 +28,11 @@ class BlogMeta extends PolymerElement {
     };
   }
 
+  apply() {
+    this.titleChanged(this.title);
+    this.descriptionChanged(this.description);
+  }
+
   titleChanged(title) {
     if (!title) return;
     if (!this.reversed) return window.document.title = `${this.base} ${this.separator} ${title}`;

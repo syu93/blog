@@ -26,6 +26,7 @@ import './my-icons.js';
 import './blog-login-modal.js';
 import './blog-toast.js';
 import './blog-fab.js';
+import './blog-meta.js';
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
@@ -217,16 +218,20 @@ class BlogApp extends PolymerElement {
           [main-title] {
             padding-right: 0px;
           }
+
+          .p-enter { animation-name: unset; }
+          .p-leave { animation-name: unset; }
         }
       </style>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
 
-      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
-      </app-route>
-
-      <blog-meta base="Heraku" title="[[_ucfirst(page)]]" description="[[page.description]]" separator="😁" reversed></blog-meta>
+      <app-route
+        route="{{route}}"
+        pattern="[[rootPath]]:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
 
       <app-drawer-layout fullbleed="" narrow="{{narrow}}" force-narrow>
         <!-- Drawer content -->
@@ -236,10 +241,8 @@ class BlogApp extends PolymerElement {
             <a name="home" href="[[rootPath]]home" title="Home">Home</a>
             <a href="">Projects</a>
             <a href="">About</a>
-            <div class="user-account">
-              <template is="dom-if" if={{user.id}}><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></template>
-              <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
-            </div>
+            <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
+            <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
           </iron-selector>
         </app-drawer>
 
@@ -256,16 +259,14 @@ class BlogApp extends PolymerElement {
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
               <a href="">Projects</a>
               <a href="">About</a>
-              <div class="user-account">
-                <template is="dom-if" if={{user.id}}><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></template>
-                <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
-              </div>
+              <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
+              <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
             </iron-selector>
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <blog-home name="home" route="[[subroute]]" user="[[user]]" data-animation="p-leave"></blog-home>
-            <blog-posts name="posts" route="[[subroute]]" user="[[user]]" data-animation="p-enter">
+            <blog-home id="home" name="home" route="[[subroute]]" user="[[user]]" data-animation="p-leave"></blog-home>
+            <blog-posts id="posts" name="posts" route="[[subroute]]" user="[[user]]" data-animation="p-enter">
               <div slot="comments"><slot name="disqus"></slot></div>
             </blog-posts>
             <blog-create name="create"></blog-create>
@@ -310,16 +311,30 @@ class BlogApp extends PolymerElement {
   ready() {
     super.ready();
     this.set('unresolved', false);
-
     // Listen for global login events
     window.addEventListener('login-success', (e) => {
+      console.log("variable");
       this.loginChanged(e, e.detail);
+    });
+
+    // Listen for global login events
+    window.addEventListener('login-success-load', (e) => {
+      console.log("variable");
+    });
+
+    window.addEventListener('session-unauthorized', (e) => {
+      this.logout(e);
     });
   }
 
   login(e) {
     e.preventDefault();
     this.$.login.display();
+
+    // Close the drawer
+    if (!this.$.drawer.persistent) {
+      this.$.drawer.close();
+    }
   }
 
   loginChanged(e, detail) {
@@ -366,15 +381,21 @@ class BlogApp extends PolymerElement {
     switch (page) {
       case 'home':
         import('./blog-home.js')
+          .then(() => {
+            this.$.home.triggerMeta();
+          })
           .catch(err => console.error(`[Router] ${err}`));
         break;
       case 'posts':
         import('./blog-posts.js')
-          // .catch(err => console.error(`[Router] ${err}`));
+          .then(() => {
+            this.$.posts.triggerMeta();
+          })
+          .catch(err => console.error(`[Router] ${err}`));
         break;
       case 'create':
         import('./blog-create.js')
-          // .catch(err => console.error(`[Router] ${err}`));
+          .catch(err => console.error(`[Router] ${err}`));
         break;
       case 'view404':
         import('./my-view404.js');
@@ -392,7 +413,6 @@ class BlogApp extends PolymerElement {
       selectedPage.classList.add('animated');
       selectedPage.classList.add(selectedPage.dataset.animation || "p-enter");
     }
-
   }
 
   _ucfirst(string) {

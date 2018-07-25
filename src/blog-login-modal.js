@@ -178,7 +178,9 @@ class BlogLoginModal extends PolymerElement {
 
     // Check if use logged in at page load
     if (window.sessionStorage.getItem('token')) {
-      this.dispatchEvent(new CustomEvent('login-success', {detail: {user: window.sessionStorage.getItem('profile')}}));
+      window.dispatchEvent(new CustomEvent('login-success', {
+        detail: {user: window.sessionStorage.getItem('profile')}
+      }));
       this.set('user', JSON.parse(window.sessionStorage.getItem('profile')));
     }
   }

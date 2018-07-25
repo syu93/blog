@@ -5,6 +5,7 @@ module.exports = (app) => {
   return {
     create,
     read,
+    readAuth,
     update,
     remove
   };
@@ -27,6 +28,7 @@ module.exports = (app) => {
       const post = await Posts.create({
         title: req.body.title,
         slug: req.body.slug,
+        metaDescription: req.body.metaDescription || "",
         summary: req.body.summary || "",
         body: req.body.body,
         image: req.body.image,
@@ -51,16 +53,41 @@ module.exports = (app) => {
    * @param       next  { parameter_description }
    * @return      { description_of_the_return_value } */
   function read(req, res, next) {
-    // If an ID is submited
+    // return all documents
     if (!req.params.slug)
       return Posts.findAll({
         where: {published: 1},
+        order: [['createdAt', 'DESC']],
         include: [{model: Users, as: "Authors", attributes: {exclude: ['token', 'password']}}]
       }).then(data => {
         res.json(data);
       }).catch(req.error);
-    // Else return all documents
+    // Else if an ID is submited
     return Posts.findOne({where: {slug: req.params.slug, published: 1}, include: [{model: Users, as: "Authors", attributes: {exclude: ['token', 'password']}}]})
+      .then(app.helpers.ensureOne)
+      .catch(app.helpers.reject(404, "No post found for this URL"))
+      .then(sites => {
+        res.json(sites)
+    }).catch(res.error);
+  }
+
+  /**
+   * @brief       Get one or multiple post 
+   * @param       req   { parameter_description }
+   * @param       res   { parameter_description }
+   * @param       next  { parameter_description }
+   * @return      { description_of_the_return_value } */
+  function readAuth(req, res, next) {
+    // return all documents
+    if (!req.params.slug)
+      return Posts.findAll({
+        order: [['createdAt', 'DESC']],
+        include: [{model: Users, as: "Authors", attributes: {exclude: ['token', 'password']}}]
+      }).then(data => {
+        res.json(data);
+      }).catch(req.error);
+    // Else if an ID is submited
+    return Posts.findOne({where: {slug: req.params.slug}, include: [{model: Users, as: "Authors", attributes: {exclude: ['token', 'password']}}]})
       .then(app.helpers.ensureOne)
       .catch(app.helpers.reject(404, "No post found for this URL"))
       .then(sites => {

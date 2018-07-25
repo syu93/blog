@@ -15,6 +15,7 @@ module.exports = (app) => {
     image: Sequelize.STRING,
     // Cover image b64 placeholder
     placeholder: Sequelize.TEXT,
+    metaDescription: Sequelize.STRING,
     summary: Sequelize.STRING,
     body: Sequelize.TEXT,
     readTime: Sequelize.INTEGER,

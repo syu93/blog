@@ -36,10 +36,12 @@ class BlogHome extends PolymerElement {
         }
       </style>
       <iron-ajax
-         auto
-         url="http://localhost:8080/api/posts"
+         id="xhr"
+         url="[[_config.cdn.media]]/api/posts"
          handle-as="json"
-         last-response="{{posts}}"></iron-ajax>
+         last-response="{{posts}}"
+         on-error="handleError"></iron-ajax>
+      <blog-meta id="meta" base="Heraku" title="Home" description="[[page.description]]" separator="😁" reversed></blog-meta>
       <section>
         <header>
           <h1>Latest posts</h1>
@@ -68,14 +70,61 @@ class BlogHome extends PolymerElement {
       posts: {
         type: Array,
         value: () => []
+      },
+      user: {
+        type: Object,
+        value: () => {return {}}
+      },
+      _config: {
+        type: Object,
+        value: () => {return window.config}
       }
     };
+  }
+
+  static get observers() {
+    return [
+      '_userChanged(user.email)'
+    ];
+  }
+
+  ready() {
+    super.ready();
+    this.$.xhr.generateRequest();
+    window.addEventListener('logout-success', () => {
+      this.$.xhr.url = `${this._config.cdn.media}/api/posts`;
+      this.$.xhr.headers = {};
+      this.$.xhr.withCredentials = false;
+      this.$.xhr.generateRequest();
+    });
+  }
+
+  handleError(e, detail) {
+    this._logout(detail.request.__data.status);
+  }
+
+  _logout(code) {
+    if (code == 401) {
+      window.dispatchEvent(new CustomEvent('session-unauthorized'));
+    }
+  }
+
+  _userChanged(email) {
+    if (!email) return;
+    this.$.xhr.url = `${this._config.cdn.media}/api/posts/all`;
+    this.$.xhr.withCredentials = true;
+    this.$.xhr.headers = {"Content-Type": "application/json", "Authorization": window.sessionStorage.getItem('token')},
+    this.$.xhr.generateRequest();
   }
 
   createNewPost() {
     window.history.pushState({}, '', '/create');
     // Trigger navigation
     return window.dispatchEvent(new CustomEvent('location-changed'));
+  }
+
+  triggerMeta() {
+    this.$.meta.apply();
   }
 
   _log(value) {

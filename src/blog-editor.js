@@ -18,6 +18,7 @@ class BlogEditor extends PolymerElement {
         .pell-actionbar {
           height: 48px;
           box-sizing: content-box;
+          white-space: nowrap;
         }
         .pell-actionbar button {
           color: #000000;

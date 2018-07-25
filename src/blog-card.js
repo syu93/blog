@@ -60,7 +60,7 @@ class BlogCard extends PolymerElement {
         article header h1 {
           margin: 0;
           font-size: 1.4em;
-          margin-bottom: 4em;
+          margin-bottom: 1em;
         }
 
         article iron-image {
@@ -70,12 +70,11 @@ class BlogCard extends PolymerElement {
           border-radius: 4px;
         }
 
-        article header p {
+        article header p#summary {
           margin: 0;
+          margin-bottom: 3em;
           font-size: 0.8em;
           color: #424141;
-          min-height: 8em;
-          max-height: 8em;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -98,6 +97,16 @@ class BlogCard extends PolymerElement {
           justify-content: space-between;
           align-items: center;
           align-content: flex-end;
+        }
+
+        .unpublished {
+          padding: 0.5em;
+          background-color: orange;
+          border-radius: 6px;
+          color: #ffffff;
+          font-weight: bold;
+          font-size: 0.7em;
+          margin-left: 1em;
         }
 
         /* Wide layout: when the viewport width is bigger than 460px, layout
@@ -155,9 +164,10 @@ class BlogCard extends PolymerElement {
         }
       </style>
         <article>
-          <a href$="/posts/[[post.slug]]" title$="[[post.title]]"></a>
+          <a href$="/posts/[[post.slug]]/[[_unpublished(post.published)]]" title$="[[post.title]]"></a>
           <header>
-            <h1><a href$="/posts/[[post.slug]]">[[post.title]]</a></h1>
+            <h1><a href$="/posts/[[post.slug]]/">[[post.title]]<template is="dom-if" if={{!post.published}}><span class="unpublished">unpublished</span></template></a></h1>
+            <p id="summary"></p>
             <div class="flex-row-center">
               <span class="author-time flex-row">[[post.Authors.name]]<blog-time date="[[post.createdAt]]"></blog-time></span>
               <span class="read-time">[[post.readTime]] minutes</span>
@@ -177,6 +187,10 @@ class BlogCard extends PolymerElement {
     return {
       post: {
         type: Object,
+        value: () => {
+          return {};
+        },
+        observer: '_postChanged'
       },
       horizontal: {
         type: Boolean,
@@ -185,7 +199,10 @@ class BlogCard extends PolymerElement {
       },
     };
   }
-
+  _postChanged(post) { this.$.summary.innerHTML = this.post.summary; }
+  _unpublished(published) {
+    if (!published) return '?unpublished=1';
+  }
 }
 
 window.customElements.define('blog-card', BlogCard);

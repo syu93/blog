@@ -3,6 +3,9 @@ const Router = require('express').Router;
 module.exports = (app) => {
   let router = new Router();
 
+  router.get('/all/:slug?',
+    app.middlewares.ensureAuth,
+    app.actions.posts.readAuth);
   router.get('/:slug?', app.actions.posts.read);
   router.post('/create', 
     app.middlewares.ensureAuth,

@@ -142,7 +142,7 @@ class BlogPostsEdit extends PolymerElement {
         main {
           padding: 3em 1.2em;
           text-align: justify;
-          font-size: 1.2em;
+          font-size: 1.6em;
           background-color: #fefefe;
           z-index: 1;
         }
@@ -238,7 +238,7 @@ class BlogPostsEdit extends PolymerElement {
           border-bottom: solid 2px var(--app-primary-color);
         }
 
-        main section { margin-bottom: 2em; }
+        main section { margin-bottom: 3em; }
 
         .summary-editor {
           --pell-min-height: 48px;
@@ -266,6 +266,15 @@ class BlogPostsEdit extends PolymerElement {
         main[ispage] {
           transform: translate(0, 0) !important;
         }
+
+        .meta-ctn { padding: 16px; }
+        .meta-ctn textarea {
+          display: block;
+          width: 100%;
+          min-height: 10vh;
+          box-sizing: border-box;
+        }
+
 
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
@@ -305,11 +314,16 @@ class BlogPostsEdit extends PolymerElement {
             <input id="inpt" type="file" hidden on-change="previewFile">
           <div class="filter">
             <div class="hero-position flex-row">
-              <vaadin-upload accept="image/*"
+              <vaadin-upload
+                id="upload"
+                accept="image/*"
                 method="POST"
                 form-data-name="cover"
                 target="http://localhost:8080/api/media/upload"
-                on-upload-success="fileUploaded"></vaadin-upload>
+                withCredentials
+                headers$='{"Authorization": "[[token]]"}'
+                on-upload-success="fileUploaded"
+                on-upload-error="fileUploadError"></vaadin-upload>
               <button class="paper-button" on-click="_changeSizing">[[post.cover]]</button>
               <select class="paper-button" value="{{post.position::input}}">
                 <option value="top" selected$="_isSeleted('top')">Top</option>
@@ -323,9 +337,6 @@ class BlogPostsEdit extends PolymerElement {
             </div>
             <h1><input type="text" value="{{post.title::input}}" placeholder="Enter a title here ..."></h1>
             <div class="meta">
-              <div class="author-ctn">
-                <iron-image src="" preload sizing="cover"></iron-image>
-              </div>
               <span class="left-space">[[post.author]]</span>
               <blog-time date="[[post.date]]"></blog-time>
               <span class="align-right read-time"><input class="time" type="number" value="{{post.readTime::input}}"> minutes</span>
@@ -343,6 +354,10 @@ class BlogPostsEdit extends PolymerElement {
             <label>Slug : / </label><input type="text" name="slug" value="{{post.slug::input}}" placeholder="post-slug-url" readonly$="[[!slugEdit]]">
             <input type="checkbox" checked="{{slugEdit::change}}">
           </section>
+          <section>
+            <label>Meta description :</label>
+            <div class="meta-ctn"><textarea value="{{post.metaDescription::input}}"></textarea></div>
+          </section>
           <section hidden$="[[!_isPost(mode)]]">
             <label>Summary :</label>
             <blog-editor class="summary-editor" html="[[post.summary]]" actions="[[summaryActions]]" on-html-changed="updateSummary"></blog-editor>
@@ -355,7 +370,7 @@ class BlogPostsEdit extends PolymerElement {
       </article>
       <!-- <button class="paper-button fab validate" on-click="testToast">Test</button> -->
       <button class="paper-button fab validate" on-click="savePost">Save [[mode]]</button>
-      <button class="paper-button fab cancel" on-click="cancelEdit">Cancel</button>
+      <button class="paper-button fab cancel"><a href$="/posts/[[post.slug]]/[[_unpublished(post.published)]]">Cancel</a></button>
       <blog-toast id="toast" message="[[toastMessage]]" on-toast-closed="toastClosed"></blog-toast>
     `;
   }
@@ -401,14 +416,28 @@ class BlogPostsEdit extends PolymerElement {
     super.ready();
     this.summaryActions = ['bold', 'underline'];
 
-    const profile = JSON.parse(window.sessionStorage.getItem('profile'));
-    this.set('post.author', profile.email);
+    this._setUser();
 
-
+    window.addEventListener('login-success', () => {
+      this._setUser();
+    });
     window.addEventListener('logout-success', () => {
+      // Clear the token
+      this.token = null;
       window.history.pushState({}, '', '/');
       window.dispatchEvent(new CustomEvent('location-changed'));
     });
+  }
+
+  _setUser() {
+      const profile = JSON.parse(window.sessionStorage.getItem('profile'));
+      this.set('post.author', profile.email);
+
+      this.token = window.sessionStorage.getItem('token');
+  }
+
+  _unpublished(published) {
+    if (!published) return '?unpublished=1';
   }
 
   savePost(e) {
@@ -440,7 +469,7 @@ class BlogPostsEdit extends PolymerElement {
   toastClosed(e) {
     if (this.error) return;
     // FIXME : Little tick to trigger page chage
-    window.history.pushState({}, '', `/posts/${this.post.slug}${this.post.id ? '/read' : ''}`);
+    window.history.pushState({}, '', `/posts/${this.post.slug}/`);
     // // Trigger navigation
     return window.dispatchEvent(new CustomEvent('location-changed'));
   }
@@ -470,6 +499,10 @@ class BlogPostsEdit extends PolymerElement {
     const parsedResponse = JSON.parse(detail.xhr.response);
     this.set('post.placeholder', parsedResponse.imageBase64);
     this.set('post.image', parsedResponse.imageName);
+  }
+
+  fileUploadError(e, detail) {
+    this._logout(detail.xhr.status);
   }
 
   previewFile() {
@@ -508,6 +541,12 @@ class BlogPostsEdit extends PolymerElement {
   }
 
   _isPost(mode) { return mode == "post" ? true : false; }
+
+  _logout(code) {
+    if (code == 401) {
+      window.dispatchEvent(new CustomEvent('session-unauthorized'));
+    }
+  }
 
   /**
    * Conver a string into slug URI
