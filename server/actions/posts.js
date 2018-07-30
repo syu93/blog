@@ -54,10 +54,13 @@ module.exports = (app) => {
    * @return      { description_of_the_return_value } */
   function read(req, res, next) {
     // return all documents
+    let limit = 10;
+    if (!req.query.limit) limit = 5;
     if (!req.params.slug)
       return Posts.findAll({
         where: {published: 1},
         order: [['createdAt', 'DESC']],
+        limit: limit,
         include: [{model: Users, as: "Authors", attributes: {exclude: ['token', 'password']}}]
       }).then(data => {
         res.json(data);
