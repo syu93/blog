@@ -74,6 +74,11 @@ class BlogApp extends PolymerElement {
         :host([page="home"]) [back-home] { display: none; }
         :host(:not([page="home"])) [back-home] { display: block; }
 
+        :host([page="blog"]) [drawer-toggle] {
+          display: block;
+        }
+        :host([page="blog"]) [back-home] { display: none; }
+
         app-header a {
           color: var(--app-header-text-color);
           text-decoration: none;
