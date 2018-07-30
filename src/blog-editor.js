@@ -23,7 +23,7 @@ class BlogEditor extends PolymerElement {
         .pell-actionbar button {
           color: #000000;
           border: none;
-          font-size: 1.2em;
+          font-size: 0.8em;
           background-color: #fefefe;
           width: 48px;
           height: 48px;
@@ -98,7 +98,28 @@ class BlogEditor extends PolymerElement {
       },
       defaultParagraphSeparator: 'p',
       styleWithCSS: false,
-      actions: this.actions,
+      actions: this.actions || [
+        'bold',
+        'italic',
+        'underline',
+        'strikethrough',
+        'heading1',
+        'heading2',
+        'paragraph',
+        'quote',
+        'olist',
+        'ulist',
+        'code',
+        'line',
+        'link',
+        'image',
+        {
+          name: 'custom',
+          icon: '<b><u><i>C</i></u></b>',
+          title: 'Custom Action',
+          result: () => pell.exec('insertHTML', '<div style="font-size: 14px;background: #4e4846;color: #ffffff;letter-spacing: 1px;font-weight: 600;">// insert some code ...</div>')
+        },
+      ],
       classes: this.classes
     });
 

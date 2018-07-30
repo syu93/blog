@@ -110,8 +110,9 @@ class BlogPostsRead extends PolymerElement {
         main {
           padding: 0.5em 1.2em;
           text-align: justify;
-          font-size: 1.6em;
+          font-size: 1.3em;
           background-color: #fefefe;
+          color: #4e4d4d;
           z-index: 1;
         }
 

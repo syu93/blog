@@ -239,8 +239,8 @@ class BlogApp extends PolymerElement {
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="home" href="[[rootPath]]home" title="Home">Home</a>
-            <a href="">Projects</a>
-            <a href="">About</a>
+            <a name="blog" href="[[rootPath]]blog">Blog</a>
+            <a name="projects" href="[[rootPath]]projects">Projects</a>
             <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
             <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
           </iron-selector>
@@ -252,13 +252,13 @@ class BlogApp extends PolymerElement {
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
-              <a href="/" alt="Back home" back-home=""><paper-icon-button icon="my-icons:arrow-back"></paper-icon-button></a>
+              <a href="/blog" alt="Back to blog" back-home=""><paper-icon-button icon="my-icons:arrow-back"></paper-icon-button></a>
               <div main-title><a href="/" title="My Simple Blog">Heraku Blog</a></div>
             </app-toolbar>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
-              <a href="">Projects</a>
-              <a href="">About</a>
+              <a name="blog" href="[[rootPath]]blog/">Blog</a>
+              <a name="projects" href="[[rootPath]]projects">Projects</a>
               <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
               <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
             </iron-selector>
@@ -269,6 +269,8 @@ class BlogApp extends PolymerElement {
             <blog-posts id="posts" name="posts" route="[[subroute]]" user="[[user]]" data-animation="p-enter">
               <div slot="comments"><slot name="disqus"></slot></div>
             </blog-posts>
+            <blog-blog id="blog" name="blog" user="[[user]]" data-animation="p-enter"></blog-blog>
+            <section name="projects"></section>
             <blog-create name="create"></blog-create>
             <my-view404 name="view404" data-animation="none"></my-view404>
           </iron-pages>
@@ -359,6 +361,10 @@ class BlogApp extends PolymerElement {
       this.page = page;
     } else if (['posts'].indexOf(page) !== -1) {
       this.page = page;
+    } else if (['blog'].indexOf(page) !== -1) {
+      this.page = page;
+    } else if (['projects'].indexOf(page) !== -1) {
+      this.page = page;
     } else if (['create'].indexOf(page) !== -1) {
       this.page = page;
     } else {
@@ -390,6 +396,13 @@ class BlogApp extends PolymerElement {
         import('./blog-posts.js')
           .then(() => {
             this.$.posts.triggerMeta();
+          })
+          .catch(err => console.error(`[Router] ${err}`));
+        break;
+      case 'blog':
+        import('./blog-blog.js')
+          .then(() => {
+            this.$.blog.triggerMeta();
           })
           .catch(err => console.error(`[Router] ${err}`));
         break;

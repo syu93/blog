@@ -1,19 +1,9 @@
-/**
- * @license
- * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
-
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import './blog-card.js';
 import './shared-styles.js';
 
-class BlogHome extends PolymerElement {
+class BlogBlog extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles">
@@ -25,23 +15,11 @@ class BlogHome extends PolymerElement {
         blog-card { margin-bottom: 1em; }
         blog-card:last-child { border: none; }
 
-        section.description {
-          display: block;
-          position: relative;
-          text-align: left;
-          border: 1px solid #dadce0;
-          border-radius: 8px;
-          padding: 24px;
-          margin: auto;
-          box-sizing: border-box;
-          font-size: 1.2em;
-        }
-
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
 
-          section.description, section main, section header {
+          section main, section header {
             width: 60%;
             margin: auto;
           }
@@ -54,13 +32,9 @@ class BlogHome extends PolymerElement {
          last-response="{{posts}}"
          on-error="handleError"></iron-ajax>
       <blog-meta id="meta" base="Heraku" title="Home" description="[[page.description]]" separator="😁" reversed></blog-meta>
-      <section class="description">
-          <img src="">
-          <p>Lorem ipsum ut et mollit laboris commodo commodo dolor aliqua ut sit eu magna mollit laborum veniam exercitation in voluptate qui mollit dolor officia sed aute excepteur dolor voluptate ea fugiat non amet et consectetur veniam aliquip sint.</p>
-      </section>
       <section>
         <header>
-          <h1>Latest posts</h1>
+          <h1>Blog</h1>
         </header>
         <main>
           <template is="dom-repeat" items={{posts}}
@@ -74,7 +48,6 @@ class BlogHome extends PolymerElement {
       </section>
     `;
   }
-
   static get properties() {
     return {
       page: {
@@ -143,10 +116,6 @@ class BlogHome extends PolymerElement {
     this.$.meta.apply();
   }
 
-  _log(value) {
-    console.log(value);
-  }
-
 }
 
-window.customElements.define('blog-home', BlogHome);
+window.customElements.define('blog-blog', BlogBlog);
