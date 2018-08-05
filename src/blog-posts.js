@@ -29,8 +29,7 @@ class BlogPosts extends PolymerElement {
          url$="http://localhost:8080/api/posts/[[slug]]"
          handle-as="json"
          last-response="{{post}}"></iron-ajax>
-
-      <blog-meta id="meta" base="Heraku" title="[[post.title]]" description="[[post.metaDescription]]" separator="😁" reversed></blog-meta>
+      <blog-meta id="meta" base="Heraku" title="[[post.title]]" description="[[post.metaDescription]]" article="[[post]]" separator="😁" reversed></blog-meta>
 
       <iron-pages selected="[[mode]]" attr-for-selected="name" fallback-selection="read">
         <blog-posts-read name="read" post="[[post]]" user="[[user]]"><slot name="comments"></slot></blog-posts-read>

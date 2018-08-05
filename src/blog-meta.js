@@ -15,33 +15,73 @@ class BlogMeta extends PolymerElement {
         type: Boolean,
         value: false,
       },
+      article: {
+        type: Object,
+      },
       title: {
         type: String,
         value: '',
-        observer: 'titleChanged'
+        // observer: 'titleChanged'
       },
       description: {
         type: String,
         value: '',
-        observer: 'descriptionChanged'
+        // observer: 'descriptionChanged'
       },
+      _config: {
+        type: Object,
+        value: () => {return window.config}
+      }
     };
   }
 
-  apply() {
-    this.titleChanged(this.title);
-    this.descriptionChanged(this.description);
+  static get observers() {
+    return [
+      '_updateDocumentTitle(title, description, article.*)'
+    ];
   }
 
-  titleChanged(title) {
-    if (!title) return;
-    if (!this.reversed) return window.document.title = `${this.base} ${this.separator} ${title}`;
-    window.document.title = window.document.title = `${title} ${this.separator} ${this.base}`;
+  apply() {
+    this._updateDocumentTitle(this.title, this.description, this.article);
   }
-  descriptionChanged(description) {
+
+  _updateDocumentTitle(title, description, article) {
+    if (!title) return;
+    if (!this.reversed) window.document.title = `${this.base} ${this.separator} ${title}`;
+    else window.document.title = window.document.title = `${title} ${this.separator} ${this.base}`;
+
     if (!description) return;
     const meta = window.document.head.querySelector('meta[name=description]');
     meta.content = description;
+
+    this._setPageMetadata({
+      title: article.title,
+      description: article.metaDescription,
+      image: `${this._config.cdn.media}/uploads/${article.image}`,
+    });
+
+  }
+
+  _setPageMetadata(article) {
+    // Set open graph metadata
+    this._setMeta('property', 'og:title', document.title);
+    this._setMeta('property', 'og:description', article.description || document.title);
+    this._setMeta('property', 'og:url', document.location.href);
+    this._setMeta('property', 'og:image', article.image);
+    // Set twitter card metadata
+    this._setMeta('property', 'twitter:title', document.title);
+    this._setMeta('property', 'twitter:description', article.description || document.title);
+    this._setMeta('property', 'twitter:url', document.location.href);
+    this._setMeta('property', 'twitter:image:src', article.image);
+  }
+  _setMeta(attrName, attrValue, content) {
+    let element = document.head.querySelector(`meta[${attrName}="${attrValue}"]`);
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute(attrName, attrValue);
+      document.head.appendChild(element);
+    }
+    element.setAttribute('content', content || '');
   }
 }
 

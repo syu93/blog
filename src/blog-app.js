@@ -202,7 +202,7 @@ class BlogApp extends PolymerElement {
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-          app-header paper-icon-button[drawer-toggle], :host(:not([page="home"])) app-header [back-home] {
+          app-header paper-icon-button[drawer-toggle], :host(:not([page="home"])) app-header [back-home], :host([page="blog"]) [drawer-toggle]{
             display: none;
           }
 
@@ -245,7 +245,7 @@ class BlogApp extends PolymerElement {
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="home" href="[[rootPath]]home" title="Home">Home</a>
             <a name="blog" href="[[rootPath]]blog">Blog</a>
-            <a name="projects" href="[[rootPath]]projects">Projects</a>
+            <!-- <a name="projects" href="[[rootPath]]projects">Projects</a> -->
             <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
             <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
           </iron-selector>
@@ -263,7 +263,7 @@ class BlogApp extends PolymerElement {
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
               <a name="blog" href="[[rootPath]]blog/">Blog</a>
-              <a name="projects" href="[[rootPath]]projects">Projects</a>
+              <!-- <a name="projects" href="[[rootPath]]projects">Projects</a> -->
               <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
               <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
             </iron-selector>
@@ -320,13 +320,7 @@ class BlogApp extends PolymerElement {
     this.set('unresolved', false);
     // Listen for global login events
     window.addEventListener('login-success', (e) => {
-      console.log("variable");
       this.loginChanged(e, e.detail);
-    });
-
-    // Listen for global login events
-    window.addEventListener('login-success-load', (e) => {
-      console.log("variable");
     });
 
     window.addEventListener('session-unauthorized', (e) => {
