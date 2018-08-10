@@ -185,7 +185,8 @@ class BlogPostsEdit extends PolymerElement {
           padding: 1em; 
         }
 
-        button.paper-button, select.paper-button {
+        a.paper-button, button.paper-button, select.paper-button {
+          text-decoration: none;
           text-transform: uppercase;
           padding: 0.5em;
           min-width: 100px;
@@ -199,7 +200,7 @@ class BlogPostsEdit extends PolymerElement {
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
 
-        button.paper-button:hover { background-color: #d8d6d6 }
+        a.paper-button:hover, button.paper-button:hover { background-color: #d8d6d6 }
 
         vaadin-upload {
           background-color: #ffffff;
@@ -331,7 +332,7 @@ class BlogPostsEdit extends PolymerElement {
                 <option value="bottom" selected$="_isSeleted('bottom')">Bottom</option>
               </select>
               <select class="paper-button" value="{{post.published::input}}">
-                <option value="false">Draft</option>ee
+                <option value="false">Draft</option>
                 <option value="true">Published</option>
               </select>
             </div>
@@ -346,7 +347,7 @@ class BlogPostsEdit extends PolymerElement {
         <div class="post-mode">
           <select class="paper-button" value="{{post.type::input}}">
             <option value="post">Post</option>
-            <option value="page">Page</option>
+            <!-- <option value="page">Page</option> -->
           </select>
         </div>
         <main ispage$="[[!_isPost(mode)]]">
@@ -370,7 +371,7 @@ class BlogPostsEdit extends PolymerElement {
       </article>
       <!-- <button class="paper-button fab validate" on-click="testToast">Test</button> -->
       <button class="paper-button fab validate" on-click="savePost">Save [[mode]]</button>
-      <button class="paper-button fab cancel"><a href$="/posts/[[post.slug]]/[[_unpublished(post.published)]]">Cancel</a></button>
+      <a class="paper-button fab cancel" href$="/posts/[[post.slug]]/[[_unpublished(post.published)]]">Cancel</a>
       <blog-toast id="toast" message="[[toastMessage]]" on-toast-closed="toastClosed"></blog-toast>
     `;
   }
