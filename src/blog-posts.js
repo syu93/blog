@@ -3,6 +3,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-image/iron-image.js';
 import './blog-time.js';
 import './blog-posts-read.js';
+import './blog-figure.js';
 
 class BlogPosts extends PolymerElement {
   static get template() {
