@@ -5,6 +5,10 @@ const Jimp = require('jimp');
 const randomstring = require("randomstring");
 const multer = require('multer');
 
+const { promisify } = require('util');
+const sizeOf = promisify(require('image-size'));
+
+
 module.exports = (app) => {
   let filePath;
   let minifyPath;
@@ -55,11 +59,18 @@ module.exports = (app) => {
         });
       });
 
-      minifyOriginalImage.then(function () {
+      minifyOriginalImage.then(async function () {
         dataImage = base64Img.base64Sync(minifyPath);
+
+        const dimensions = await sizeOf(__dirname + '/../uploads/' + newFileName);
+
         res.status(200).json({
           imageName: newFileName,
-          imageBase64: dataImage
+          imageBase64: dataImage,
+          dimensions: {
+            width: dimensions.width,
+            height: dimensions.height
+          }
         });
       });
     });
