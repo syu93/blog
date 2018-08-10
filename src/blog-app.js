@@ -58,6 +58,7 @@ class BlogApp extends PolymerElement {
           font-family: 'Pacifico';
           text-transform: lowercase;
           font-size: 30px;
+          letter-spacing: 3px;
           /* In the narrow layout, the toolbar is offset by the width of the
           drawer button, and the text looks not centered. Add a padding to
           match that button */
@@ -258,12 +259,11 @@ class BlogApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <a href="/blog" alt="Back to blog" back-home=""><paper-icon-button icon="my-icons:arrow-back"></paper-icon-button></a>
-              <div main-title><a href="/" title="My Simple Blog">Heraku Blog</a></div>
+              <div main-title><a href="/" title="Heraku Blog">Heraku Blog</a></div>
             </app-toolbar>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
               <a name="blog" href="[[rootPath]]blog/">Blog</a>
-              <!-- <a name="projects" href="[[rootPath]]projects">Projects</a> -->
               <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
               <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
             </iron-selector>
