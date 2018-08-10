@@ -37,6 +37,16 @@ class BlogHome extends PolymerElement {
           font-size: 1.2em;
         }
 
+        section.description .mii {
+          height: 128px;
+          float: left;
+        }
+
+        section.description [small] {
+          font-size: 16px;
+          letter-spacing: 2px;
+        }
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
@@ -55,8 +65,9 @@ class BlogHome extends PolymerElement {
          on-error="handleError"></iron-ajax>
       <blog-meta id="meta" base="Heraku" title="Home" description="[[page.description]]" separator="😁" reversed></blog-meta>
       <section class="description">
-          <img src="">
-          <p>Lorem ipsum ut et mollit laboris commodo commodo dolor aliqua ut sit eu magna mollit laborum veniam exercitation in voluptate qui mollit dolor officia sed aute excepteur dolor voluptate ea fugiat non amet et consectetur veniam aliquip sint.</p>
+          <img class="mii" src="/images/mii.jpg" alt="My Nintendo Mii avatare">
+          <p>Hi,<br>I'm <strong>Hervé TUTUAKU</strong>, a web developer based in Paris.</p>
+          <p small>I ♡ the Web, Web Components are the future, Polymer and Progressive Web App</p>
       </section>
       <section>
         <header>
