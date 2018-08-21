@@ -247,8 +247,10 @@ class BlogApp extends PolymerElement {
             <a name="home" href="[[rootPath]]home" title="Home">Home</a>
             <a name="blog" href="[[rootPath]]blog">Blog</a>
             <!-- <a name="projects" href="[[rootPath]]projects">Projects</a> -->
-            <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
-            <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+            <template is="dom-if" if={{nimda}}>
+              <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
+              <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+            </template>
           </iron-selector>
         </app-drawer>
 
@@ -264,8 +266,10 @@ class BlogApp extends PolymerElement {
             <iron-selector selected="[[page]]" attr-for-selected="name" class="links" role="navigation">
               <a name="home" href="[[rootPath]]home" title="Home">Home</a>
               <a name="blog" href="[[rootPath]]blog/">Blog</a>
-              <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
-              <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+              <template is="dom-if" if={{nimda}}>
+                <template is="dom-if" if={{user.id}}><div class="user-account"><span class="username">[[user.name]]</span><a href="#" on-click="logout">(Logout)</a></div></template>
+                <template is="dom-if" if={{!user.id}}><a href="#" on-click="login">Login</a></template>
+              </template>
             </iron-selector>
           </app-header>
 
@@ -303,6 +307,7 @@ class BlogApp extends PolymerElement {
       },
       routeData: Object,
       subroute: Object,
+      nimda: Boolean,
       user: {
         type: Object
       }
@@ -318,6 +323,10 @@ class BlogApp extends PolymerElement {
   ready() {
     super.ready();
     this.set('unresolved', false);
+
+    if (window.location.search == "?nimda" || this.user.email)
+      this.nimda = true;
+
     // Listen for global login events
     window.addEventListener('login-success', (e) => {
       this.loginChanged(e, e.detail);
