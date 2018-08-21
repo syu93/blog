@@ -73,7 +73,7 @@ class BlogCard extends PolymerElement {
         article header p#summary {
           margin: 0;
           margin-bottom: 3em;
-          font-size: 0.8em;
+          font-size: 1em;
           color: #424141;
           white-space: nowrap;
           overflow: hidden;
