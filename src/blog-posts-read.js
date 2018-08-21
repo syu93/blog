@@ -1,5 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import './blog-posts-comment.js';
+import Lightense from './lightense.js';
 
 class BlogPostsRead extends PolymerElement {
   static get template() {
@@ -10,7 +11,10 @@ class BlogPostsRead extends PolymerElement {
           position: relative;
         }
 
-        article { transform: translate(0, -64px); }
+        article { 
+          position: relative;
+          top: -64px;
+        }
         article header { position: relative; }
 
         article header h1 {
@@ -108,13 +112,12 @@ class BlogPostsRead extends PolymerElement {
         }
 
         main {
+          position: relative;
           padding: 0.5em 1.2em;
           text-align: justify;
           font-size: 1.3em;
-          background-color: #f7f7f7;
+          background-color: #fefefe;
           color: #4e4d4d;
-          z-index: 1;
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
 
         main h2#summary { 
@@ -128,6 +131,10 @@ class BlogPostsRead extends PolymerElement {
           color: #6A6A6A;
         }
 
+        #content {
+          position: relative;
+        }
+
         [hidden] {display: none !important;}
 
         .left-space { margin-left: 0.6em; }
@@ -135,8 +142,8 @@ class BlogPostsRead extends PolymerElement {
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
-          :host article{
-            transform: translate(0, 0);
+          article{
+            top: 0; /* Sadly I have to use postion beacause of lignthense*/
           }
 
           article header h1 {
@@ -148,8 +155,7 @@ class BlogPostsRead extends PolymerElement {
           }
 
           main {
-            margin: 0.5em 15%;
-            transform: translate(0, -100px);
+            margin: 0 15%;
           }
 
           blog-posts-comment {
@@ -157,7 +163,7 @@ class BlogPostsRead extends PolymerElement {
           }
         }
       </style>
-      <article>
+      <article id="article">
         <header>
           <figure><iron-image
             src="http://localhost:8080/uploads/[[post.image]]"
@@ -175,7 +181,7 @@ class BlogPostsRead extends PolymerElement {
             </div>
           </div>
         </header>
-        <main>
+        <main id="main">
           <h2 id="summary" hidden="[[!_isPost(mode)]]"></h2>
           <section class="social-network"><a href="#">Share</a></section>
           <div id="content"></div>
@@ -225,10 +231,24 @@ class BlogPostsRead extends PolymerElement {
     this.set('mode', 'post');
     if (!this.post) return;
     this.$.content.innerHTML = this.post.body;
-    
+
     if (!this.post.summary) { return this.set('mode', 'page'); }
     
     this.$.summary.innerHTML = this.post.summary;
+
+    const figures = this.shadowRoot.querySelector('#content').querySelectorAll('blog-figure');
+
+    Lightense(figures, {
+      body: this.shadowRoot, // Where to append the backdrop
+      head: this.shadowRoot, // Where to append the styles
+      time: 300,
+      padding: 40,
+      offset: 40,
+      keyboard: true,
+      cubicBezier: 'cubic-bezier(.2, 0, .1, 1)',
+      background: 'rgba(83, 83, 83, .94)',
+      zIndex: 2147483647
+    });
 
     this.set('config', {
       slug: this.post.slug,
