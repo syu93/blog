@@ -67,7 +67,7 @@ class BlogHome extends PolymerElement {
       <section class="description">
           <img class="mii" src="/images/mii.jpg" alt="My Nintendo Mii avatare">
           <p>Hi,<br>I'm <strong>Hervé TUTUAKU</strong>, a web developer based in Paris.</p>
-          <p small>I ♡ the Web, Web Components are the future, Polymer and Progressive Web App</p>
+          <p small>I ♡ the Web, Web Components are the future, talking about the Web, Polymer and Progressive Web App</p>
       </section>
       <section>
         <header>
