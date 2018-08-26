@@ -42,6 +42,8 @@ class BlogCard extends PolymerElement {
           min-width: 64px;
           max-height: 64px;
           max-width: 64px;
+          border: solid 1px rgba(204, 204, 220, 1);
+          border-radius: 3px;
         }
 
         a {

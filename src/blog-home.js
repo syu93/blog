@@ -47,6 +47,26 @@ class BlogHome extends PolymerElement {
           letter-spacing: 2px;
         }
 
+        section.description [center] {
+          text-align: center;
+        }
+
+        section.description .socials a {
+          display: inline-block;
+          text-decoration: none;
+          color: inherit;
+          transition: color 0.3s ease;
+        }
+
+        section.description .socials a:hover {
+          color: var(--app-primary-color);
+        }
+
+        iron-icon {
+          height: 32px;
+          width: 32px;
+        }
+
         /* Wide layout: when the viewport width is bigger than 460px, layout
         changes to a wide layout. */
         @media (min-width: 460px) {
@@ -68,6 +88,11 @@ class BlogHome extends PolymerElement {
           <img class="mii" src="/images/mii.jpg" alt="My Nintendo Mii avatare">
           <p>Hi,<br>I'm <strong>Hervé TUTUAKU</strong>, a web developer based in Paris.</p>
           <p small>I ♡ the Web, Web Components are the future, talking about the Web, Polymer and Progressive Web App</p>
+          <p small center><strong>#UseThePlatform</strong></p>
+          <p class="socials" small center>Join me on
+            <a href="https://twitter.com/_Syu93" title="Twitter"><iron-icon icon="my-icons:social-twitter"></iron-icon></a>
+            <a href="https://github.com/syu93" title="Github"><iron-icon icon="my-icons:social-github"></iron-icon></a>
+            <a href="https://medium.com/@syu93" title="Medium"><iron-icon icon="my-icons:social-medium"></iron-icon></a></p>
       </section>
       <section>
         <header>
